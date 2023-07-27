@@ -1,0 +1,24 @@
+{
+    "remotePath": "./public/site",
+    "host": "kamino07.umbler.net",
+    "username": "radiationproject-cc",
+    "password": "n$qo/$N6|Srt[b-",
+    "port": 21,
+    "secure": false,
+    "protocol": "ftp",
+    "uploadOnSave": false,
+    "passive": false,
+    "debug": true,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "ignore": [
+        "\\.vscode",
+        "\\.git",
+        "\\.DS_Store"
+    ],
+    "generatedFiles": {
+        "uploadOnSave": true,
+        "extensionsToInclude": [],
+        "path": ""
+    }
+}

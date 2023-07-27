@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product.css">
+    
+</head>
+
+<body>
+
+    <header>
+        <h2 class="logo">Logo</h2>
+        <nav class="navigation">
+            <a href="#">About</a>
+            <a href="#">Service</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+<div class="main">
+    
+    <div id="myLeftPanel" class="leftPanel">
+        <!--
+            <a href="#">Entrada</a>
+            <a href="#">Saida</a>
+            <a href="#">Graficos</a>
+        -->
+        <button id="entrada" class="panelButton">Entrada</button>
+        <button id="saida" class="panelButton">Saida</button>
+        <button id="Graficos" class="panelButton">Graficos</button>    
+    </div>
+        
+    <div id="midPanel" class="midPanel">
+            
+        <div id="entrada" class="entrada">
+            <div class="buttons">
+                <button id="btnCriarProduto">Criar produto</button>
+                <button id="btnLancarProduto">Lançar produto</button>
+            </div>
+            
+            <div class="wrapper">
+                <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+                <div class="form-box login">
+                    <h2>Criar Produto</h2>
+                    <form id="addProduct">
+                        
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
+                            <input type="text" id="product" required>
+                            <label>Produto</label>
+                        </div>
+
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="card"></ion-icon></span>
+                            <input type="any" step="0.01" min="0.00" max="9999.99" id="valor" required>
+                            <label>Valor</label>
+                        </div>
+
+                        <input type="submit" value="Login" class="btn">
+
+                    </form>
+                </div>
+            </div>
+
+            <div id="table" class="table">
+
+                <!-- <div class="rows">
+    
+                    <label>nome</label>
+                    <label>valor</label>
+                    <label>data</label>
+                    
+                    <button class="btn_edit"> edit</button>
+                    <button class="btn_delete">delete</button>
+                </div>
+    
+                <div class="rows pair">
+                    
+                    <label>nomeasdddddddddsdsssss</label>
+                    <label>valor</label>
+                    <label>data</label>
+                    
+                    <button class="btn_edit"> edit</button>
+                    <button class="btn_delete">delete</button>
+                </div> -->
+
+
+
+            </div>        
+
+        </div>
+
+    </div>        
+
+</div>
+
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/product.js"></script>
+
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
