@@ -1,15 +1,13 @@
-const wrapperBtnClose = document.querySelector('.icon-close');
+const wrapperBtnClose = document.querySelectorAll('.icon-close');
 const btnCriarProduto = document.querySelector('#btnCriarProduto');
-const btnLancarProduto = document.querySelector('.btnLancarProduto');
-const wrapper = document.querySelector('.wrapper');
-var btn_edit = document.querySelector('.btn_edit');
-
+const btnLancarProduto = document.querySelector('#btnLancarProduto');
+const wrapperAddProduct = document.querySelector('.wrapper-addProduct');
+const wrapperReleaseProduct = document.querySelector('.wrapper-releaseProduct');
 
 var rowsCount = 0;
 let array = [] ;
 
 $('document').ready(function(){
-
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
@@ -57,35 +55,254 @@ $('document').ready(function(){
         error: function(error){
             console.log(error);
         }
-    });
+    });//end ajax request
 
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'sugestions', email: "asdawd@gmail.com" },
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+            console.log(data);
+            
+            for(i in jsonObject){
+                sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value});
+            }
+          
+        },
+        error: function(error){
+            console.log(error);
+        }
+
+    });//end ajax request
+
+    var now = new Date();
+    var month = (now.getMonth() + 1);               
+    var day = now.getDate();
+    if (month < 10) 
+        month = "0" + month;
+    if (day < 10) 
+        day = "0" + day;
+    var today = now.getFullYear() + '-' + month + '-' + day;
+    $('#data').val(today);
+
+    console.log(sampleSuggestions)
 });
-
-// $('#button').on('click', function() {
-//     console.log("btn_edit");
-// });
 
 btnCriarProduto.addEventListener('click', () => { 
-    wrapper.classList.add('active');
+    if(wrapperAddProduct.className == "wrapper-addProduct"){
+        if(wrapperReleaseProduct.className == "wrapper-releaseProduct active"){
+            wrapperReleaseProduct.classList.remove('active');
+        }
+        wrapperAddProduct.classList.add('active');
+    }else{
+        wrapperAddProduct.classList.remove('active');
+    }
 })
 
-wrapperBtnClose.addEventListener('click', () => {
-    wrapper.classList.remove('active');
+btnLancarProduto.addEventListener('click', () => { 
+    if(wrapperReleaseProduct.className == "wrapper-releaseProduct"){
+        if(wrapperAddProduct.className == "wrapper-addProduct active"){
+            wrapperAddProduct.classList.remove('active');
+        }
+        wrapperReleaseProduct.classList.add('active');
+    }else{
+        wrapperReleaseProduct.classList.remove('active');
+    }
+
+})
+
+function clearInputs(){
+    productInputs.forEach(productInputs => {
+        productInputs.value = '';
+    });
+
+    productValue.forEach(productValue => {
+        productValue.value = '';
+    });
+}
+
+function btnClose(event){
+    wrapperReleaseProduct.classList.remove('active');
+    wrapperAddProduct.classList.remove('active');
+    clearInputs();
+}
+
+wrapperBtnClose.forEach(btns => btns.addEventListener("click", btnClose));
+
+var sampleSuggestions = [
+    // { name: "Apple", value: 5.00 },
+    // { name: "Banana", value: 2.50 },
+    // { name: "Cherry", value: 7.50 },
+    // { name: "Grape", value: 3.20 },
+    // { name: "Orange", value: 4.00 },
+    // { name: "Pineapple", value: 6.50 },
+    // { name: "Strawberry", value: 4.80 },
+    // { name: "Watermelon", value: 8.00 },
+  ];
+
+  // Get references to the input field and the suggestions container
+  const productInputs = document.querySelectorAll(".product");
+  const productValue = document.querySelectorAll(".valor");
+
+  productInputs.forEach(inputField => {
+    const parentContainer = inputField.parentElement;
+    const suggestionsContainer = document.createElement("div");
+    suggestionsContainer.classList.add("suggestions");
+    
+    parentContainer.appendChild(suggestionsContainer);
+
+    inputField.addEventListener("input", function() {
+      const inputValue = inputField.value.toLowerCase();
+      const filteredSuggestions = sampleSuggestions.filter(suggestion =>
+        suggestion.name.toLowerCase().startsWith(inputValue)
+      );
+
+      suggestionsContainer.innerHTML = ""; // Clear previous suggestions
+
+      filteredSuggestions.forEach(suggestion => {
+        const suggestionElement = document.createElement("div");
+        suggestionElement.textContent = suggestion.name;
+        suggestionElement.classList.add("suggestion");
+        suggestionsContainer.appendChild(suggestionElement);
+
+        // Click event handler for each suggestion
+        suggestionElement.addEventListener("click", function(event) {
+          const clickedSuggestion = event.target.textContent;
+          const selectedSuggestion = sampleSuggestions.find(s => s.name === clickedSuggestion);
+
+          inputField.value = selectedSuggestion.name;
+          suggestionsContainer.innerHTML = ""; // Clear the suggestions container after selecting a suggestion
+ 
+          // Use the selectedSuggestion.value as needed (here, we log it to the console)
+          //console.log("Selected value:", selectedSuggestion.value);
+
+          productValue.forEach(productValue => {
+            productValue.value = parseFloat(selectedSuggestion.value);
+          });
+
+        });
+      });
+    });
 });
 
-// $('#valor').on('input', function() {
-//     this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-//     console.log("sdds1111");
-// });
 
-// $('.btn_delete').on('click', function() {
-//     console.log("btn_desadawlete");
-// });
+const addProductForm = document.getElementById("addProduct");
 
-// $('#button').on('click', function() {
-//     console.log("btn_edit");
-// });
+function addProductfunction(email, productNames, productValuess, date) {
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'sugestionsAdd', email: email, product: productNames, value: productValuess, date: date},
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+            console.log(data);
 
-// btn_edit.addEventListener('click', () => {
-//     console.log("btn_edit2");
-// });
+            if(jsonObject === "Added"){
+                productInputs.value = "";
+                productValue.value = "";
+                window.location.reload();
+            }
+            
+          
+        },
+        error: function(error){
+            console.log(error);
+        }
+
+    });//end ajax request
+
+}
+
+function editProductfunction(email, id, productNames, productValuess) {
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'sugestionsEdit', email: email, id: id, product: productNames, value: productValuess},
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+            console.log(data);
+        
+            if(jsonObject === "Edited"){
+                window.location.reload();
+            }          
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+}
+
+function removeProductfunction(email, id, name) {
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'sugestionsDelete', email: email, id: id  },
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+            console.log(data);
+        
+            if(jsonObject === "Deleted"){
+                const index = sampleSuggestions.findIndex(suggestion => suggestion.name === name);
+                if (index !== -1) {
+                    // Remove o objeto do array pelo índice encontrado
+                    sampleSuggestions.splice(index, 1);
+                    productInputs.value = "";
+                    productValue.value = "";
+                    console.log(`O nome "${name}" foi encontrado e removido.`);
+                    
+                } else {
+                    console.log(`Nenhum objeto com o nome "${name}" foi encontrado.`);
+                }
+            }          
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+}
+
+addProductForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const clickedButtonValue = event.submitter.value;
+
+    var productNames = document.querySelector('.product').value;
+    //console.log(productName);
+
+    var productValuess = document.querySelector('.valor').value;
+    //console.log(productValues);
+
+    var id = 0;
+    if(clickedButtonValue != "sugestionsAdd" ){
+        const suggestion = sampleSuggestions.find(suggestion => suggestion.name === productNames);
+        id = suggestion ? suggestion.ID : null;
+    
+    }
+    
+
+   // console.log(id);
+
+    switch (clickedButtonValue) {
+        case "sugestionsAdd":
+            addProductfunction("asdawd@gmail.com", productNames, productValuess);
+        break;
+
+        case "sugestionsEdit":
+            editProductfunction("asdawd@gmail.com", productNames, productValuess);
+        break;
+
+        case "sugestionsDelete":
+            removeProductfunction("asdawd@gmail.com", id, productNames);
+        break;
+    }
+});
+
+
+
+
+

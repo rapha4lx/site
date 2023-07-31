@@ -42,25 +42,76 @@
                 <button id="btnLancarProduto">Lançar produto</button>
             </div>
             
-            <div class="wrapper">
+            <div class="wrapper-addProduct">
                 <span class="icon-close"><ion-icon name="close"></ion-icon></span>
-                <div class="form-box login">
+                <div class="form-box addProduct">
                     <h2>Criar Produto</h2>
                     <form id="addProduct">
                         
                         <div class="input-box">
                             <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
-                            <input type="text" id="product" required>
+                            <input type="text" class="product" required>
+                            <div class="suggestions"></div>
                             <label>Produto</label>
                         </div>
 
                         <div class="input-box">
                             <span class="icon"><ion-icon name="card"></ion-icon></span>
-                            <input type="any" step="0.01" min="0.00" max="9999.99" id="valor" required>
+                            <input type="any" step="0.01" min="0.00" max="9999.99" class="valor" required>
                             <label>Valor</label>
                         </div>
 
-                        <input type="submit" value="Login" class="btn">
+                        <button type="submit" value="sugestionsAdd" class="btn">
+                            <span >Adicionar</span>
+                        </button>
+
+                        <button type="submit" value="sugestionsEdit" class="btn">
+                            <span >Editar</span>
+                        </button>
+
+                        <button type="submit" value="sugestionsDelete" class="btn">
+                            <span >Deletar</span>
+                        </button>
+                        <!-- <input type="submit" value="sugestionsAdd" class="btn"> -->
+                        <!-- <input type="submit" value="sugestionsEdit" class="btn">
+                        <input type="submit" value="sugestionsDelete" class="btn"> -->
+
+                    </form>
+                </div>
+            </div>
+
+                 <!-- Second Form -- Buttom -->
+
+            <div class="wrapper-releaseProduct">
+                <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+                 <div class="form-box releaseProduct">
+                    <h2>Lançar Produto</h2>
+                    <form id="releaseProduct">
+                        
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
+                            <input type="text" class="product" autocomplete="on" required>
+                            <div class="suggestions"></div>
+                            <label>Produto</label>
+                        </div>
+
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="card"></ion-icon></span>
+                            <input type="any" step="0.01" min="0.00" max="9999.99" class="valor" required>
+                            <label>Valor</label>
+                        </div>
+
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="calendar"></ion-icon></span>
+                            <input type="date" id="data" name="data" required></input>
+                            <label>Data</label>
+                        </div>
+                        
+                        <button type="submit" value="releaseProduct" class="btn">
+                            <span >Adicionar</span>
+                        </button>
+
+                        <!-- <input type="submit" value="releaseProduct" class="btn"> -->
 
                     </form>
                 </div>

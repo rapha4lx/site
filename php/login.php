@@ -14,6 +14,7 @@ $arrow = mysqli_fetch_assoc($sql_query);
 if(empty($arrow['email'])){
     die(json_encode("User or password not match"));
 }
+
 $name = $arrow["name"];
 echo json_encode("$name");
 ?>

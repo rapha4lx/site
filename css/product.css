@@ -151,11 +151,7 @@
     background: rgb(172, 3, 3);
 }
 
-.form-box.register {
-    visibility: hidden;
-}
-
-.wrapper {
+.wrapper-addProduct {
     position: absolute;
     left: 50%; 
     top: 50%;
@@ -177,45 +173,21 @@
     transition: transform .5s ease, height .2s ease;
 }
 
-.wrapper h2 {
+.wrapper-addProduct h2 {
     user-select: none;
 }
 
-.wrapper.active .form-box {
+.wrapper-addProduct.active .form-box {
     width: 100%;
     padding: 40px;
 }
 
-.wrapper.active {
+.wrapper-addProduct.active {
     transform: scale(1);
     display: inherit;
 }
 
-.wrapper.active.register .form-box.login {
-    transition: none;
-    transform: translateX(-400px);
-}
-
-.wrapper.active .form-box.login {
-    transition: transform .18s ease;
-    transform: translateX(0);
-}
-
-.wrapper.active.register {
-    height: 520px;
-}
-
-.wrapper.active.register .form-box.register {
-    transition: transform .18s ease;
-    transform: translateX(0);
-}
-
-.wrapper .form-box.register {
-    position: absolute;
-    transform: translateX(400px);
-}
-
-.wrapper .icon-close {
+.wrapper-addProduct .icon-close {
     position: absolute;
     top: 0;
     right: 0;
@@ -232,10 +204,70 @@
     z-index: 1;
 }
 
-.wrapper .icon-close:hover {
+.wrapper-addProduct .icon-close:hover {
     background: red;
     transition: .4s;
 }
+
+
+.wrapper-releaseProduct {
+    position: absolute;
+    left: 50%; 
+    top: 50%;
+    margin-left: -120px; /* sempre a metade da largura */
+    margin-top: -220px; 
+
+    width: 400px;
+    height: 440px;
+    background: white;
+    border: 2px solid rgba(255,255,255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    /* box-shadow: 0 0 30px rgba(0, 0,0, .8); */
+     display: flex; 
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transform: scale(0);
+    transition: transform .5s ease, height .2s ease;
+}
+
+.wrapper-releaseProduct h2 {
+    user-select: none;
+}
+
+.wrapper-releaseProduct.active .form-box {
+    width: 100%;
+    padding: 40px;
+}
+
+.wrapper-releaseProduct.active {
+    transform: scale(1);
+    display: inherit;
+}
+
+.wrapper-releaseProduct .icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    background: #162938;
+    font-size: 2em;
+    color:  white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.wrapper-releaseProduct .icon-close:hover {
+    background: red;
+    transition: .4s;
+}
+
 
 .form-box h2 {
     font-size: 2em;
@@ -298,9 +330,32 @@
     font-weight: 500;
 }
 
-
 .btn:hover {
     border: 2px solid #162938;
     color: #162938;
     background: #1629384b;
 }
+
+/* Estilizando as sugestões */
+.suggestions {
+    position: absolute; /* Posição absoluta em relação ao elemento pai */
+    padding-bottom: 2px;
+    left: 0; /* Alinha as sugestões com o campo de entrada */
+    z-index: 999; /* Z-index alto para garantir que as sugestões fiquem acima de outros elementos */
+    background-color: white; /* Cor de fundo das sugestões (pode personalizar como desejar) */
+    border: 1px solid #ccc; /* Adiciona uma borda às sugestões (opcional) */
+    cursor: default; /* Define o cursor do mouse como padrão, para indicar que não é clicável */
+    background-color: white; /* Cor de fundo das sugestões (pode personalizar como desejar) */
+
+}
+.suggestions .suggestion {
+    padding: 5px; /* Espaçamento interno para melhorar a aparência (opcional) */
+    cursor: pointer; /* Define o cursor do mouse como apontador, para indicar que é clicável */
+  }
+  
+  /* Estilizando as sugestões individuais quando o mouse está sobre elas */
+  .suggestions .suggestion:hover {
+    background-color: #f0f0f0; /* Cor de fundo quando o mouse está sobre a sugestão (opcional) */
+  }
+
+
