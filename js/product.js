@@ -1,17 +1,22 @@
 const wrapperBtnClose = document.querySelectorAll('.icon-close');
 const btnCriarProduto = document.querySelector('#btnCriarProduto');
 const btnLancarProduto = document.querySelector('#btnLancarProduto');
+
 const wrapperAddProduct = document.querySelector('.wrapper-addProduct');
 const wrapperReleaseProduct = document.querySelector('.wrapper-releaseProduct');
+const wrapperEditProduct = document.querySelector('.wrapper-editProduct');
 
 var rowsCount = 0;
-let array = [] ;
+var array = [] ;
+
+var selectedEditID = 0;
+var selectedDivID = 0;
 
 $('document').ready(function(){
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'login', email: "asdawd@gmail.com" },
+        data: { function : 'login'},
         datatype: 'json',
         success: function(data){
             const jsonObject = eval(data);
@@ -20,36 +25,47 @@ $('document').ready(function(){
             for(i in jsonObject){
                 array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date});
                 if(i & 1){
-                    $('#table').prepend('<div class="rows"><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit">edit</button><button class="btn_delete">delete</button></div>');
+                    $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                     /* get the dynamic Div*/
                 }else{
-                    $('#table').prepend('<div class="rows pair"><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button id="btn_edit" class="btn_edit">edit</button><button class="btn_delete">delete</button></div>');
+                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                 }
                 rowsCount++;
             }
-    
+            
             $(document).on('click', '.btn_edit', function() {
-                var btnIndex = $(this).parent().index();
-                
-                console.log("btn_edit   ", btnIndex, "id no mysql ", array[btnIndex].ID.toString());
+                var btnIndex = parseInt($(this).attr('data-id'));
+                var index = array.findIndex(array => array.ID == btnIndex);
+
+                console.log(btnIndex);
+                console.log(index);
+
+                productInputs.forEach(input => {
+                    input.value = array[index].product;
+                });
+                productValue.forEach(value => {
+                    value.value = array[index].value;
+                });
+
+                selectedEditID = array[index].ID;
+                selectedDivID = $(this).parent().index();
+                console.log(selectedDivID);
+
+                document.querySelectorAll("#data")[1].value = array[index].date;
+                if(wrapperEditProduct.className == "wrapper-editProduct"){
+                    wrapperAddProduct.classList.remove('active');
+                    wrapperReleaseProduct.classList.remove('active');
+                    wrapperEditProduct.classList.add('active');
+                }
             });
-    
+
             $(document).on('click', '.btn_delete', function(){
-                var btnIndex = $(this).parent().index();
-                console.log("btn_delete   ", btnIndex);
-    
-                //array.push({ID: rowsCount+1, product: "sdasd"+1, value: rowsCount+20, date: "10"});
-    
-                //if(rowsCount & 1){
-                //   $('#table').append('<div class="rows"><label>' + array[rowsCount].product + '</label><label>R$'+ array[rowsCount].value +'</label><label>'+ array[rowsCount].date +'</label><button class="btn_edit">edit</button><button class="btn_delete">delete</button></div>');
-                //    /* get the dynamic Div*/
-                //}else{
-                //    $('#table').append('<div class="rows pair"><label>'+ array[rowsCount].product + '</label><label>R$'+ array[rowsCount].value +'</label><label>'+ array[rowsCount].date +'</label><button id="btn_edit" class="btn_edit">edit</button><button class="btn_delete">delete</button></div>');
-                //}
-                
-                $(this).parent().remove();
-    
-                rowsCount++;
+                var btnIndex = parseInt($(this).attr('data-id'));
+                //console.log("btn_delete   ", btnIndex);
+
+                releaseRemove(btnIndex);
+                $(this).parent().remove();             
+                //rowsCount++;
             });
         },
         error: function(error){
@@ -60,23 +76,19 @@ $('document').ready(function(){
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'sugestions', email: "asdawd@gmail.com" },
+        data: { function : 'sugestions'},
         datatype: 'json',
         success: function(data){
             const jsonObject = eval(data);
-            console.log(data);
-            
+            //console.log(data);
             for(i in jsonObject){
                 sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value});
-            }
-          
+            }          
         },
         error: function(error){
             console.log(error);
         }
-
     });//end ajax request
-
     var now = new Date();
     var month = (now.getMonth() + 1);               
     var day = now.getDate();
@@ -86,32 +98,32 @@ $('document').ready(function(){
         day = "0" + day;
     var today = now.getFullYear() + '-' + month + '-' + day;
     $('#data').val(today);
-
-    console.log(sampleSuggestions)
+    //console.log(sampleSuggestions)
 });
 
 btnCriarProduto.addEventListener('click', () => { 
     if(wrapperAddProduct.className == "wrapper-addProduct"){
         if(wrapperReleaseProduct.className == "wrapper-releaseProduct active"){
             wrapperReleaseProduct.classList.remove('active');
+            wrapperEditProduct.classList.remove('active');
         }
         wrapperAddProduct.classList.add('active');
     }else{
         wrapperAddProduct.classList.remove('active');
     }
-})
+});
 
 btnLancarProduto.addEventListener('click', () => { 
     if(wrapperReleaseProduct.className == "wrapper-releaseProduct"){
         if(wrapperAddProduct.className == "wrapper-addProduct active"){
             wrapperAddProduct.classList.remove('active');
+            wrapperEditProduct.classList.remove('active');
         }
         wrapperReleaseProduct.classList.add('active');
     }else{
         wrapperReleaseProduct.classList.remove('active');
     }
-
-})
+});
 
 function clearInputs(){
     productInputs.forEach(productInputs => {
@@ -126,30 +138,25 @@ function clearInputs(){
 function btnClose(event){
     wrapperReleaseProduct.classList.remove('active');
     wrapperAddProduct.classList.remove('active');
+    wrapperEditProduct.classList.remove('active');
     clearInputs();
 }
 
 wrapperBtnClose.forEach(btns => btns.addEventListener("click", btnClose));
 
-var sampleSuggestions = [
-    // { name: "Apple", value: 5.00 },
-    // { name: "Banana", value: 2.50 },
-    // { name: "Cherry", value: 7.50 },
-    // { name: "Grape", value: 3.20 },
-    // { name: "Orange", value: 4.00 },
-    // { name: "Pineapple", value: 6.50 },
-    // { name: "Strawberry", value: 4.80 },
-    // { name: "Watermelon", value: 8.00 },
-  ];
+var sampleSuggestions = [];
 
   // Get references to the input field and the suggestions container
   const productInputs = document.querySelectorAll(".product");
   const productValue = document.querySelectorAll(".valor");
 
-  productInputs.forEach(inputField => {
+productInputs.forEach(inputField => {
     const parentContainer = inputField.parentElement;
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.classList.add("suggestions");
+    suggestionsContainer.style.height = "200px"; // Adjust the height as needed
+    suggestionsContainer.style.overflow = "auto";
+    suggestionsContainer.style.visibility = "hidden";
     
     parentContainer.appendChild(suggestionsContainer);
 
@@ -160,6 +167,12 @@ var sampleSuggestions = [
       );
 
       suggestionsContainer.innerHTML = ""; // Clear previous suggestions
+
+      if (inputField.value.length > 0) {
+        suggestionsContainer.style.visibility = "visible";
+      }else {
+        suggestionsContainer.style.visibility = "hidden";
+      }    
 
       filteredSuggestions.forEach(suggestion => {
         const suggestionElement = document.createElement("div");
@@ -181,53 +194,57 @@ var sampleSuggestions = [
           productValue.forEach(productValue => {
             productValue.value = parseFloat(selectedSuggestion.value);
           });
-
         });
       });
     });
 });
 
-
 const addProductForm = document.getElementById("addProduct");
+const releaseProductForm = document.getElementById("releaseProduct");
 
-function addProductfunction(email, productNames, productValuess, date) {
+function addProductfunction(productNames, productValuess) {
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'sugestionsAdd', email: email, product: productNames, value: productValuess, date: date},
+        data: { function : 'sugestionsAdd', product: productNames, value: productValuess},
         datatype: 'json',
         success: function(data){
-            const jsonObject = eval(data);
-            console.log(data);
-
-            if(jsonObject === "Added"){
-                productInputs.value = "";
-                productValue.value = "";
-                window.location.reload();
-            }
+            const jsonObject = JSON.parse(data);
             
-          
+            if(jsonObject.status === "Added"){
+                clearInputs();
+                sampleSuggestions.push({ID: jsonObject.ID, name: productNames, value: productValuess});
+            }else{
+                //error message here
+            }
         },
         error: function(error){
             console.log(error);
         }
-
     });//end ajax request
-
 }
 
-function editProductfunction(email, id, productNames, productValuess) {
+function editProductfunction(id, productNames, productValuess) {
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'sugestionsEdit', email: email, id: id, product: productNames, value: productValuess},
+        data: { function : 'sugestionsEdit', id: id, product: productNames, value: productValuess},
         datatype: 'json',
         success: function(data){
-            const jsonObject = eval(data);
-            console.log(data);
+            const jsonObject = JSON.parse(data);
         
-            if(jsonObject === "Edited"){
-                window.location.reload();
+            if(jsonObject.status === "Edited"){
+                clearInputs();
+                const index = sampleSuggestions.findIndex(suggestion => suggestion.name === productNames);
+                if (index !== -1) {
+                    // Remove o objeto do array pelo índice encontrado
+                    clearInputs();
+                    sampleSuggestions[index] = {ID: jsonObject.ID, name: productNames, value: productValuess};
+
+                    console.log(sampleSuggestions[index]);                    
+                } else {
+                    //error message here
+                }
             }          
         },
         error: function(error){
@@ -236,23 +253,21 @@ function editProductfunction(email, id, productNames, productValuess) {
     });//end ajax request
 }
 
-function removeProductfunction(email, id, name) {
+function removeProductfunction(id, name) {
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'sugestionsDelete', email: email, id: id  },
+        data: { function : 'sugestionsDelete', id: id  },
         datatype: 'json',
         success: function(data){
-            const jsonObject = eval(data);
-            console.log(data);
+             const jsonObject = JSON.parse(data);
         
-            if(jsonObject === "Deleted"){
+            if(jsonObject.status === "Deleted"){
                 const index = sampleSuggestions.findIndex(suggestion => suggestion.name === name);
                 if (index !== -1) {
                     // Remove o objeto do array pelo índice encontrado
                     sampleSuggestions.splice(index, 1);
-                    productInputs.value = "";
-                    productValue.value = "";
+                    clearInputs();
                     console.log(`O nome "${name}" foi encontrado e removido.`);
                     
                 } else {
@@ -266,11 +281,11 @@ function removeProductfunction(email, id, name) {
     });//end ajax request
 }
 
+//FORM SUBMIT FORM EVENT ADDPRODUCTSUGGESTIONS
 addProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const clickedButtonValue = event.submitter.value;
-
     var productNames = document.querySelector('.product').value;
     //console.log(productName);
 
@@ -281,28 +296,134 @@ addProductForm.addEventListener("submit", function(event) {
     if(clickedButtonValue != "sugestionsAdd" ){
         const suggestion = sampleSuggestions.find(suggestion => suggestion.name === productNames);
         id = suggestion ? suggestion.ID : null;
-    
     }
-    
-
-   // console.log(id);
 
     switch (clickedButtonValue) {
         case "sugestionsAdd":
-            addProductfunction("asdawd@gmail.com", productNames, productValuess);
+            addProductfunction(productNames, productValuess);
         break;
 
         case "sugestionsEdit":
-            editProductfunction("asdawd@gmail.com", productNames, productValuess);
+            editProductfunction(productNames, productValuess);
         break;
 
         case "sugestionsDelete":
-            removeProductfunction("asdawd@gmail.com", id, productNames);
+            removeProductfunction(id, productNames);
         break;
     }
 });
 
+function releaseAdd(productNames, productValuess, dates){
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'releaseAdd', product: productNames, value: productValuess, date: dates},
+        datatype: 'json',
+        success: function(data){
+            // console.log(productNames);
+            // console.log(productValuess);
+            // console.log(dates);
+           // console.log(data);
+            const jsonObject = JSON.parse(data);
+            console.log(jsonObject);
+            if (jsonObject.status === "Added") {
+                array.push({ID: jsonObject.ID, product: productNames, value: productValuess, date: dates});
+                if(rowsCount & 1){
+                    $('#table').prepend('<div class="rows" data-id='+ jsonObject.ID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                    /* get the dynamic Div*/
+                }else{
+                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject.ID +'><label>'+ productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                }
+                rowsCount++;
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+}
+
+function releaseRemove(id){
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'releaseDelete', id: id },
+        datatype: 'json',
+        success: function(data){
+            console.log(data);
+            const jsonObject = JSON.parse(data);
+
+            if (jsonObject.status === "Deleted") {
+                var index = array.findIndex(array => array.ID === id);
+                array.splice(index, 1);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+}
+
+function releaseEdit(productNames, productValuess, dates){
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'releaseEdit', id: selectedEditID, product: productNames, value: productValuess, date: dates},
+        datatype: 'json',
+        success: function(data){
+            console.log(data);
+            const jsonObject = JSON.parse(data);
+
+            if (jsonObject.status === "Edited") {
+                var index = array.findIndex(array => array.ID == selectedEditID);
+                array[index] = {id: selectedEditID, product: productNames, value: productValuess, date: dates};
+
+                console.log(array[index]);
+                var newContent;
+
+                if(selectedDivID & 1){
+                    newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                }else{
+                    newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                }
+                
+                var $table = $('#table');
+                var $specificItem = $table.find('.rows[data-id="' + selectedEditID + '"]');
 
 
+                // Update the specific item's content
+                $specificItem.replaceWith(newContent);
+            }
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+}
+
+//FORM SUBMIT FORM EVENT ADDPRODUCTRELEASE
+releaseProductForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var productNames = document.querySelectorAll('.product')[1].value;
+    var productValuess = document.querySelector('.valor').value;
+    var date = document.querySelector('#data').value;
+
+    releaseAdd(productNames, productValuess, date);
+});
+
+const editProductForm = document.getElementById('editProduct');
+
+editProductForm.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var productNames = document.querySelectorAll('.product')[2].value;
+    var productValuess = document.querySelector('.valor').value;
+    var date = document.querySelector('#data').value;
+
+
+
+    releaseEdit(productNames, productValuess, date);
+});
 
 

@@ -57,8 +57,8 @@ $("#login").submit( function(event) {
         datatype: 'json'
     }).done(function(data) {
         // Handle the response from the server if required
-        console.log(data);
-        window.location.href = "http://www.devmedia.com.br/guia/javascript/34372";
+        //console.log(data);
+        window.location.href = "product.php";
     });    
 });
 
@@ -86,7 +86,7 @@ $("#register").submit( function(event) {
         datatype: 'json'
     }).done(function(data) {
         // Handle the response from the server if required
-        console.log(data);
+        window.location.href = "product.php";
     });    
 });
 

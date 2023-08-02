@@ -2,6 +2,8 @@
 include ('connection.php');
 include ('commands.php');
 
+session_start();
+
 header('Content-Type: application/json');
 
 $name = $_POST['name'];
@@ -30,13 +32,20 @@ $sql_code = "INSERT INTO `site_users` (`name`, `email`, `pass`, `db_name`) VALUE
 $mysqli->query($sql_code);
 
 $sql_code = "CREATE TABLE {$tableName} (
-    email varchar(1000),
-    product varchar(255),
-    value float,
-    data varchar(255)
+    ID INT(11) NOT NULL AUTO_INCREMENT,
+    product VARCHAR(1000),
+    value FLOAT NULL,
+    date VARCHAR(255),
+    PRIMARY KEY (ID)
 );";
-
 $mysqli->query($sql_code);
 
-echo json_encode("sucess");
+$_SESSION['email'] = $email;
+$_SESSION['pass'] = $pass;
+$_SESSION['logged'] = true;
+
+header('Location: product.php');
+exit();
+
+//echo json_encode("sucess");
 ?>

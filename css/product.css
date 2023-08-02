@@ -268,6 +268,63 @@
     transition: .4s;
 }
 
+.wrapper-editProduct {
+    position: absolute;
+    left: 50%; 
+    top: 50%;
+    margin-left: -120px; /* sempre a metade da largura */
+    margin-top: -220px; 
+
+    width: 400px;
+    height: 440px;
+    background: white;
+    border: 2px solid rgba(255,255,255, .5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    /* box-shadow: 0 0 30px rgba(0, 0,0, .8); */
+     display: flex; 
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transform: scale(0);
+    transition: transform .5s ease, height .2s ease;
+}
+
+.wrapper-editProduct h2 {
+    user-select: none;
+}
+
+.wrapper-editProduct.active .form-box {
+    width: 100%;
+    padding: 40px;
+}
+
+.wrapper-editProduct.active {
+    transform: scale(1);
+    display: inherit;
+}
+
+.wrapper-editProduct .icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    background: #162938;
+    font-size: 2em;
+    color:  white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.wrapper-editProduct .icon-close:hover {
+    background: red;
+    transition: .4s;
+}
 
 .form-box h2 {
     font-size: 2em;
@@ -348,14 +405,15 @@
     background-color: white; /* Cor de fundo das sugestões (pode personalizar como desejar) */
 
 }
+
 .suggestions .suggestion {
     padding: 5px; /* Espaçamento interno para melhorar a aparência (opcional) */
     cursor: pointer; /* Define o cursor do mouse como apontador, para indicar que é clicável */
-  }
+}
   
-  /* Estilizando as sugestões individuais quando o mouse está sobre elas */
-  .suggestions .suggestion:hover {
-    background-color: #f0f0f0; /* Cor de fundo quando o mouse está sobre a sugestão (opcional) */
-  }
+/* Estilizando as sugestões individuais quando o mouse está sobre elas */
+.suggestions .suggestion:hover {
+     background-color: #f0f0f0; /* Cor de fundo quando o mouse está sobre a sugestão (opcional) */
+}
 
 

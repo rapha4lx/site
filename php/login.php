@@ -3,6 +3,8 @@ include ('connection.php');
 
 header('Content-Type: application/json');
 
+session_start();
+
 $email = $_POST['email'];
 $pass = $_POST['pass'];
 $name = "";
@@ -15,6 +17,16 @@ if(empty($arrow['email'])){
     die(json_encode("User or password not match"));
 }
 
-$name = $arrow["name"];
-echo json_encode("$name");
+$email = $arrow["email"];
+$pass = $arrow["pass"];
+
+$_SESSION['user'] = $arrow['user'];
+
+$_SESSION['email'] = $email;
+$_SESSION['pass'] = $pass;
+$_SESSION['logged'] = true;
+header('Location: product.php');
+exit();
+
+//echo json_encode("$name");
 ?>

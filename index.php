@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['email']) && isset($_SESSION['pass'])   )
+    {
+        $_SESSION['logged'] = true;
+        header('Location: product.php');
+        exit();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +58,6 @@
                 </div>
 
                 <input type="submit" value="Login" class="btn">
-                
                 
                 <div class="login-register">
                     <p>Don't have an account?

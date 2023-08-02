@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    if($_SESSION['logged']){
+
+    }else{
+        header('Location: index.php');
+        exit();
+    }
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,8 +50,8 @@
             
         <div id="entrada" class="entrada">
             <div class="buttons">
-                <button id="btnCriarProduto">Criar produto</button>
-                <button id="btnLancarProduto">Lançar produto</button>
+                <button id="btnCriarProduto" class="btn">Criar produto</button>
+                <button id="btnLancarProduto" class="btn">Lançar produto</button>
             </div>
             
             <div class="wrapper-addProduct">
@@ -81,12 +93,49 @@
             </div>
 
                  <!-- Second Form -- Buttom -->
-
-            <div class="wrapper-releaseProduct">
-                <span class="icon-close"><ion-icon name="close"></ion-icon></span>
-                 <div class="form-box releaseProduct">
-                    <h2>Lançar Produto</h2>
+                 
+                 <div class="wrapper-releaseProduct">
+                     <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+                     <div class="form-box releaseProduct">
+                         <h2>Lançar Produto</h2>
                     <form id="releaseProduct">
+                        
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
+                            <input type="text" class="product" autocomplete="on" required>
+                            <div class="suggestions"></div>
+                            <label>Produto</label>
+                        </div>
+
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="card"></ion-icon></span>
+                            <input type="any" step="0.01" min="0.00" max="9999.99" class="valor" required>
+                            <label>Valor</label>
+                        </div>
+                        
+                        <div class="input-box">
+                            <span class="icon"><ion-icon name="calendar"></ion-icon></span>
+                            <input type="date" id="data" name="data" required></input>
+                            <label>Data</label>
+                        </div>
+                        
+                        <button type="submit" value="releaseProduct" class="btn">
+                            <span >Adicionar</span>
+                        </button>
+                        
+                        <!-- <input type="submit" value="releaseProduct" class="btn"> -->
+                        
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Thirt Form -- Buttom -->
+
+            <div class="wrapper-editProduct">
+                <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+                 <div class="form-box editProduct">
+                    <h2>Editar Produto</h2>
+                    <form id="editProduct">
                         
                         <div class="input-box">
                             <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
@@ -108,7 +157,7 @@
                         </div>
                         
                         <button type="submit" value="releaseProduct" class="btn">
-                            <span >Adicionar</span>
+                            <span>Editar</span>
                         </button>
 
                         <!-- <input type="submit" value="releaseProduct" class="btn"> -->
@@ -116,6 +165,7 @@
                     </form>
                 </div>
             </div>
+
 
             <div id="table" class="table">
 
