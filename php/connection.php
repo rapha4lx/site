@@ -1,8 +1,8 @@
 <?php
-define('HOST','mysql670.umbler.com');
-define('USER','radiation_admin');
-define('PASS','xjh6pBiMoqKWg8');
-define('DB','radiationproject');
+define('HOST','');
+define('USER','');
+define('PASS','');
+define('DB','');
 
 $mysqli = new mysqli(HOST,USER,PASS,DB);
 if($mysqli->error){
