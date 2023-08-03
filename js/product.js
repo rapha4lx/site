@@ -37,8 +37,9 @@ $('document').ready(function(){
                 var btnIndex = parseInt($(this).attr('data-id'));
                 var index = array.findIndex(array => array.ID == btnIndex);
 
-                console.log(btnIndex);
-                console.log(index);
+                console.log("btnIndex: " + btnIndex);
+                console.log("index: " + index);
+                console.log("array: " + array[index].ID);
 
                 productInputs.forEach(input => {
                     input.value = array[index].product;
@@ -49,7 +50,7 @@ $('document').ready(function(){
 
                 selectedEditID = array[index].ID;
                 selectedDivID = $(this).parent().index();
-                console.log(selectedDivID);
+                console.log("Selected divID: " + selectedDivID);
 
                 document.querySelectorAll("#data")[1].value = array[index].date;
                 if(wrapperEditProduct.className == "wrapper-editProduct"){
@@ -376,23 +377,26 @@ function releaseEdit(productNames, productValuess, dates){
 
             if (jsonObject.status === "Edited") {
                 var index = array.findIndex(array => array.ID == selectedEditID);
-                array[index] = {id: selectedEditID, product: productNames, value: productValuess, date: dates};
+                array[index] = {ID: selectedEditID, product: productNames, value: parseFloat(productValuess), date: dates};
+                // array[index].ID = selectedEditID;
+                // array[index].product = productNames;
+                // array[index].value = parseFloat(productValuess);
+                // array[index].date = dates;
 
                 console.log(array[index]);
                 var newContent;
+                var table = $('#table');
+                var specificItem;
 
-                if(selectedDivID & 1){
+                if(selectedEditID & 1){
                     newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                    specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
                 }else{
                     newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                    specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
                 }
-                
-                var $table = $('#table');
-                var $specificItem = $table.find('.rows[data-id="' + selectedEditID + '"]');
-
-
                 // Update the specific item's content
-                $specificItem.replaceWith(newContent);
+                specificItem.replaceWith(newContent);
             }
         },
         error: function(error){
@@ -416,12 +420,9 @@ const editProductForm = document.getElementById('editProduct');
 
 editProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
-
     var productNames = document.querySelectorAll('.product')[2].value;
-    var productValuess = document.querySelector('.valor').value;
+    var productValuess = document.querySelectorAll('.valor')[2].value;
     var date = document.querySelector('#data').value;
-
-
 
     releaseEdit(productNames, productValuess, date);
 });

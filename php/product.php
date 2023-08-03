@@ -153,7 +153,7 @@ function releaseEdit($email, $id, $product, $value, $date){
     include ('commands.php');
 
     $user_db_name = getDbName($email);
-    $sql_code = "UPDATE `$user_db_name` SET `product`='$product', `value`= '$value', `date`= '$date' WHERE `ID` = '$id' ";
+    $sql_code = "UPDATE `$user_db_name` SET `product`='$product', `value`= $value, `date`= '$date' WHERE `ID` = $id ";
     $sql_query = $mysqli->query($sql_code); //or die ("fail: ". $mysqli->error);
     if($sql_query){
         $lastID = mysqli_insert_id($mysqli);

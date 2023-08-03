@@ -156,7 +156,7 @@
                             <label>Data</label>
                         </div>
                         
-                        <button type="submit" value="releaseProduct" class="btn">
+                        <button type="submit" value="releaseEdit" class="btn">
                             <span>Editar</span>
                         </button>
 
