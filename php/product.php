@@ -6,6 +6,7 @@ $id = $_POST['id'];
 $product = $_POST['product'];
 $value = $_POST['value'];
 $date = $_POST['date'];
+$status = $_POST['status'];
 
 session_start();
 
@@ -33,11 +34,11 @@ switch ($function){
         break;
 
     case 'sugestionsAdd':
-        sugestionsAdd($email, $product, $value);
+        sugestionsAdd($email, $product, $value, $status);
         break;
 
     case 'releaseAdd':
-        releaseAdd($email, $product, $value, $date);
+        releaseAdd($email, $product, $value, $date, $status);
     break;
     
     case 'releaseDelete':
@@ -54,19 +55,7 @@ function Login($email){
     include ('connection.php');
     include ('commands.php');
 
-
     $user_db_name = getDbName($email);
-
-    // $sql_code = "SELECT `db_name` FROM `site_users` WHERE `email` = '$email';";
-    // $sql_query = $mysqli->query($sql_code) ;//or  die ("fail: ". $mysqli->error);
-    // $arrow = mysqli_fetch_assoc($sql_query);
-    
-    // if(!isset($arrow["db_name"])){
-    //     die(json_encode("Usuario não existe"));
-    // }
-
-    // $db = $arrow["db_name"];
-
     $sql_query = $mysqli->query("SELECT * FROM `$user_db_name`");
     $Array = array();
     
@@ -82,16 +71,7 @@ function sugestions($email){
     include ('commands.php');
 
     $user_db_name = getDbName($email);
-
-    // $sql_code = "SELECT `db_name` FROM `site_users` WHERE `email` = '$email';";
-    // $sql_query = $mysqli->query($sql_code) ;//or  die ("fail: ". $mysqli->error);
-    // $arrow = mysqli_fetch_all($sql_query);
-    
-    // if($arrow[0] < 1){
-    //     die(json_encode("Usuario não existe"));
-    // }
-
-    $sql_query = $mysqli->query("SELECT `ID`, `product`, `value` FROM `site_users_product` WHERE `email` = '$email';");
+    $sql_query = $mysqli->query("SELECT `ID`, `product`, `value`, `status` FROM `site_users_product` WHERE `email` = '$email';");
 
     $Array = array();
 
@@ -164,11 +144,11 @@ function releaseEdit($email, $id, $product, $value, $date){
     }
 }
 
-function sugestionsAdd($email, $product, $value){
+function sugestionsAdd($email, $product, $value, $status){
     include ('connection.php');
     include ('commands.php');
 
-    $sql_code = "INSERT INTO `site_users_product`(`email`, `product`, `value`) VALUES ('$email','$product','$value')";
+    $sql_code = "INSERT INTO `site_users_product`(`email`, `product`, `value`, `status`) VALUES ('$email','$product','$value', '$status')";
     $sql_query = $mysqli->query($sql_code);
     if($sql_query){
         $lastID = mysqli_insert_id($mysqli);
@@ -179,13 +159,13 @@ function sugestionsAdd($email, $product, $value){
     }
 }
 
-function releaseAdd($email, $product, $value, $date){
+function releaseAdd($email, $product, $value, $date, $status){
     include ('connection.php');
     include ('commands.php');
 
     $user_db_name = getDbName($email);
 
-    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `date`) VALUES ('$product', $value, '$date')";
+    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `date`, `status`) VALUES ('$product', $value, '$date', '$status')";
     $sql_query = $mysqli->query($sql_code); //or die (json_encode($mysqli->error));
     
     if($sql_query && mysqli_affected_rows($mysqli) > 0){

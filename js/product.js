@@ -6,11 +6,17 @@ const wrapperAddProduct = document.querySelector('.wrapper-addProduct');
 const wrapperReleaseProduct = document.querySelector('.wrapper-releaseProduct');
 const wrapperEditProduct = document.querySelector('.wrapper-editProduct');
 
-var rowsCount = 0;
-var array = [] ;
+const release = document.querySelector('#entrada');
+const output = document.querySelector('#saida');
+const graphic = document.querySelector('#Graficos');
+
+var array = [];
+var rowsReleaseCount = 0;
+var rowsOutCount = 0;
 
 var selectedEditID = 0;
 var selectedDivID = 0;
+var Status = "release"; 
 
 $('document').ready(function(){
     $.ajax({
@@ -22,17 +28,28 @@ $('document').ready(function(){
             const jsonObject = eval(data);
             console.log(data);
 
-            for(i in jsonObject){
-                array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date});
-                if(i & 1){
-                    $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
-                    /* get the dynamic Div*/
+            for(i in jsonObject){            
+               if(jsonObject[i].status == Status){
+                    array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
+                    if(rowsReleaseCount & 1){
+                        $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                        /* get the dynamic Div*/
+                    }else{
+                        $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    }
+                    rowsReleaseCount++;
                 }else{
-                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
+                    // if(rowsOutCount & 1){
+                    //     $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    //     /* get the dynamic Div*/
+                    // }else{
+                    //     $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    // }
+                    rowsOutCount++;
                 }
-                rowsCount++;
             }
-            
+
             $(document).on('click', '.btn_edit', function() {
                 var btnIndex = parseInt($(this).attr('data-id'));
                 var index = array.findIndex(array => array.ID == btnIndex);
@@ -62,12 +79,11 @@ $('document').ready(function(){
 
             $(document).on('click', '.btn_delete', function(){
                 var btnIndex = parseInt($(this).attr('data-id'));
-                //console.log("btn_delete   ", btnIndex);
 
                 releaseRemove(btnIndex);
-                $(this).parent().remove();             
-                //rowsCount++;
+                $(this).parent().remove();
             });
+
         },
         error: function(error){
             console.log(error);
@@ -83,7 +99,7 @@ $('document').ready(function(){
             const jsonObject = eval(data);
             //console.log(data);
             for(i in jsonObject){
-                sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value});
+                sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value, status: jsonObject[i].status});
             }          
         },
         error: function(error){
@@ -99,7 +115,6 @@ $('document').ready(function(){
         day = "0" + day;
     var today = now.getFullYear() + '-' + month + '-' + day;
     $('#data').val(today);
-    //console.log(sampleSuggestions)
 });
 
 btnCriarProduto.addEventListener('click', () => { 
@@ -155,7 +170,7 @@ productInputs.forEach(inputField => {
     const parentContainer = inputField.parentElement;
     const suggestionsContainer = document.createElement("div");
     suggestionsContainer.classList.add("suggestions");
-    suggestionsContainer.style.height = "200px"; // Adjust the height as needed
+    suggestionsContainer.style.height = "120px"; // Adjust the height as needed
     suggestionsContainer.style.overflow = "auto";
     suggestionsContainer.style.visibility = "hidden";
     
@@ -176,26 +191,28 @@ productInputs.forEach(inputField => {
       }    
 
       filteredSuggestions.forEach(suggestion => {
-        const suggestionElement = document.createElement("div");
-        suggestionElement.textContent = suggestion.name;
-        suggestionElement.classList.add("suggestion");
-        suggestionsContainer.appendChild(suggestionElement);
+        if(suggestion.status == Status){
+            const suggestionElement = document.createElement("div");
+            suggestionElement.textContent = suggestion.name;
+            suggestionElement.classList.add("suggestion");
+            suggestionsContainer.appendChild(suggestionElement);
 
-        // Click event handler for each suggestion
-        suggestionElement.addEventListener("click", function(event) {
-          const clickedSuggestion = event.target.textContent;
-          const selectedSuggestion = sampleSuggestions.find(s => s.name === clickedSuggestion);
+            // Click event handler for each suggestion
+            suggestionElement.addEventListener("click", function(event) {
+            const clickedSuggestion = event.target.textContent;
+            const selectedSuggestion = sampleSuggestions.find(s => s.name === clickedSuggestion);
 
-          inputField.value = selectedSuggestion.name;
-          suggestionsContainer.innerHTML = ""; // Clear the suggestions container after selecting a suggestion
- 
-          // Use the selectedSuggestion.value as needed (here, we log it to the console)
-          //console.log("Selected value:", selectedSuggestion.value);
+            inputField.value = selectedSuggestion.name;
+            suggestionsContainer.innerHTML = ""; // Clear the suggestions container after selecting a suggestion
+    
+            // Use the selectedSuggestion.value as needed (here, we log it to the console)
+            //console.log("Selected value:", selectedSuggestion.value);
 
-          productValue.forEach(productValue => {
-            productValue.value = parseFloat(selectedSuggestion.value);
-          });
-        });
+            productValue.forEach(productValue => {
+                productValue.value = parseFloat(selectedSuggestion.value);
+            });
+         });
+        }
       });
     });
 });
@@ -207,14 +224,14 @@ function addProductfunction(productNames, productValuess) {
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'sugestionsAdd', product: productNames, value: productValuess},
+        data: { function : 'sugestionsAdd', product: productNames, value: productValuess, status: Status},
         datatype: 'json',
         success: function(data){
             const jsonObject = JSON.parse(data);
             
             if(jsonObject.status === "Added"){
                 clearInputs();
-                sampleSuggestions.push({ID: jsonObject.ID, name: productNames, value: productValuess});
+                sampleSuggestions.push({ID: jsonObject.ID, name: productNames, value: productValuess, status: Status});
             }else{
                 //error message here
             }
@@ -318,24 +335,35 @@ function releaseAdd(productNames, productValuess, dates){
     $.ajax({
         url: "php/product.php", // Set the server-side script URL here
         type: "POST", // Set the HTTP method here
-        data: { function : 'releaseAdd', product: productNames, value: productValuess, date: dates},
+        data: { function : 'releaseAdd', product: productNames, value: productValuess, date: dates, status: Status},
         datatype: 'json',
         success: function(data){
             // console.log(productNames);
             // console.log(productValuess);
             // console.log(dates);
-           // console.log(data);
+            //console.log(data);
             const jsonObject = JSON.parse(data);
             console.log(jsonObject);
             if (jsonObject.status === "Added") {
-                array.push({ID: jsonObject.ID, product: productNames, value: productValuess, date: dates});
-                if(rowsCount & 1){
-                    $('#table').prepend('<div class="rows" data-id='+ jsonObject.ID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
-                    /* get the dynamic Div*/
+                array.push({ID: jsonObject.ID, product: productNames, value: productValuess, date: dates, status: Status});
+
+                if(Status == "release"){
+                    if(rowsReleaseCount & 1){
+                        $('#table').prepend('<div class="rows" data-id='+ jsonObject.ID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                        /* get the dynamic Div*/
+                    }else{
+                        $('#table').prepend('<div class="rows pair" data-id='+ jsonObject.ID +'><label>'+ productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                    }
+                    rowsReleaseCount++;
                 }else{
-                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject.ID +'><label>'+ productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                    if(rowsOutCount & 1){
+                        $('#table').prepend('<div class="rows" data-id='+ jsonObject.ID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                        /* get the dynamic Div*/
+                    }else{
+                        $('#table').prepend('<div class="rows pair" data-id='+ jsonObject.ID +'><label>'+ productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button id="btn_edit" class="btn_edit" data-id='+ jsonObject.ID +'>edit</button><button class="btn_delete" data-id='+ jsonObject.ID +'>delete</button></div>');
+                    }
+                    rowsOutCount++;
                 }
-                rowsCount++;
             }
         },
         error: function(error){
@@ -376,25 +404,36 @@ function releaseEdit(productNames, productValuess, dates){
             const jsonObject = JSON.parse(data);
 
             if (jsonObject.status === "Edited") {
-                var index = array.findIndex(array => array.ID == selectedEditID);
-                array[index] = {ID: selectedEditID, product: productNames, value: parseFloat(productValuess), date: dates};
+                //var index = array.findIndex(array => array.ID == selectedEditID);
+                array[selectedEditID] = {ID: selectedEditID, product: productNames, value: parseFloat(productValuess), date: dates};
                 // array[index].ID = selectedEditID;
                 // array[index].product = productNames;
                 // array[index].value = parseFloat(productValuess);
                 // array[index].date = dates;
 
-                console.log(array[index]);
+                console.log(array[selectedEditID]);
                 var newContent;
                 var table = $('#table');
                 var specificItem;
 
-                if(selectedEditID & 1){
-                    newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                    specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
+                if(array[selectedEditID].status == Status){
+                    if(selectedEditID & 1){
+                        newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                        specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
+                    }else{
+                        newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                        specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
+                    }
                 }else{
-                    newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                    specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
+                    if(selectedEditID & 1){
+                        newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                        specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
+                    }else{
+                        newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                        specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
+                    }
                 }
+
                 // Update the specific item's content
                 specificItem.replaceWith(newContent);
             }
@@ -410,7 +449,7 @@ releaseProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     var productNames = document.querySelectorAll('.product')[1].value;
-    var productValuess = document.querySelector('.valor').value;
+    var productValuess = document.querySelectorAll('.valor')[1].value;
     var date = document.querySelector('#data').value;
 
     releaseAdd(productNames, productValuess, date);
@@ -427,4 +466,106 @@ editProductForm.addEventListener("submit", function(event) {
     releaseEdit(productNames, productValuess, date);
 });
 
+function updateTable() {
+    if($('#table div').length > 0 || $('#table canvas').length > 0) {
+        $('#table div').remove();
+        $('#table canvas').remove();
+    }
 
+    if(Status == "graphic"){
+
+        return;
+    }
+
+    let c = 0;
+    for(i in array){
+        if(array[i].status == Status){
+            if(c & 1){
+                $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+                /* get the dynamic Div*/
+            }else{
+                $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+            }
+            c++;
+        }
+    }
+}
+
+release.addEventListener('click', function(){
+    if(Status === "release"){
+        return;
+    }
+    
+    Status = "release";
+    updateTable();
+});
+
+output.addEventListener('click', function(){
+    if(Status === "out"){
+        return;
+    }
+    
+    Status = "out";
+    updateTable();
+});
+
+const data = {
+    labels: ['January', 'February', 'March', 'April', 'May'],
+    values: [10, 15, 7, 25, 12],
+};
+
+graphic.addEventListener('click', function(){
+    if(Status == "graphic"){
+        return;
+    }
+
+    Status = "graphic";
+    
+    updateTable();
+
+    var graphicArray = [];
+
+
+    $('#table').prepend('<canvas id="myChart" width="400" height="200"></canvas>');
+
+    
+    //const width = canvas.width;
+    //const height = canvas.height;
+
+    var maxValue = array[0].value;
+    graphicArray.push({product: array[0].product, value: parseInt(array[0].value), date: array[0].date});
+    
+
+    for(let i = 1; i < array.length; i++){
+        if(maxValue < array[i].value){
+            maxValue = array[i].value;
+        }
+        if(graphicArray.findIndex(graphicsArray => graphicsArray.product == array[i].product) > -1){
+            var index = graphicArray.findIndex(graphic => graphic.product == array[i].product);
+            graphicArray[index].value = parseInt(graphicArray[index].value) + parseInt(array[i].value);
+        }else{
+            graphicArray.push({product: array[i].product, value: array[i].value, date: array[i].date});
+        }
+        
+    }
+    console.log(maxValue);
+    const canvas = document.getElementById('myChart');
+    const ctx = canvas.getContext('2d');
+    var myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: graphicArray.map(graphic => graphic.product),
+        datasets: [{
+            label: '# of Votes',
+            data: graphicArray.map(graphic => graphic.value),
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ]
+        }]
+    }
+    });
+
+});

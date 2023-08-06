@@ -36,7 +36,8 @@ $sql_code = "CREATE TABLE {$tableName} (
     product VARCHAR(1000),
     value FLOAT NULL,
     date VARCHAR(255),
-    PRIMARY KEY (ID)
+    PRIMARY KEY (ID),
+    status VARCHAR(50)
 );";
 $mysqli->query($sql_code);
 

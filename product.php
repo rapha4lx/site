@@ -166,33 +166,9 @@
                 </div>
             </div>
 
-
             <div id="table" class="table">
 
-                <!-- <div class="rows">
-    
-                    <label>nome</label>
-                    <label>valor</label>
-                    <label>data</label>
-                    
-                    <button class="btn_edit"> edit</button>
-                    <button class="btn_delete">delete</button>
-                </div>
-    
-                <div class="rows pair">
-                    
-                    <label>nomeasdddddddddsdsssss</label>
-                    <label>valor</label>
-                    <label>data</label>
-                    
-                    <button class="btn_edit"> edit</button>
-                    <button class="btn_delete">delete</button>
-                </div> -->
-
-
-
             </div>        
-
         </div>
 
     </div>        
@@ -202,6 +178,7 @@
 
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.3/chart.min.js"></script>
     <script src="js/product.js"></script>
 
 
