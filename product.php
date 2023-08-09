@@ -1,7 +1,8 @@
 <?php
     session_start();
 
-    if(!$mysqli->real_escape_string($_SESSION['logged'])){
+
+    if(!$_SESSION['logged']){
         header('Location: index.php');
         exit();
     }
