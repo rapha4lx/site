@@ -1,3 +1,4 @@
+
 const wrapperBtnClose = document.querySelectorAll('.icon-close');
 const btnCriarProduto = document.querySelector('#btnCriarProduto');
 const btnLancarProduto = document.querySelector('#btnLancarProduto');
@@ -10,13 +11,13 @@ const release = document.querySelector('#entrada');
 const output = document.querySelector('#saida');
 const graphic = document.querySelector('#Graficos');
 
-var array = [];
-var rowsReleaseCount = 0;
-var rowsOutCount = 0;
+let array = [];
+let rowsReleaseCount = 0;
+let rowsOutCount = 0;
 
-var selectedEditID = 0;
-var selectedDivID = 0;
-var Status = "release"; 
+let selectedEditID = 0;
+let selectedDivID = 0;
+let Status = "release"; 
 
 $('document').ready(function(){
     $.ajax({
@@ -26,33 +27,25 @@ $('document').ready(function(){
         datatype: 'json',
         success: function(data){
             const jsonObject = eval(data);
-            console.log(data);
 
-            for(i in jsonObject){            
-               if(jsonObject[i].status == Status){
-                    array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
+            for(let i in jsonObject){            
+            if(jsonObject[i].status == Status){
+               array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
                     if(rowsReleaseCount & 1){
-                        $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
-                        /* get the dynamic Div*/
+                    $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                     }else{
-                        $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                     }
                     rowsReleaseCount++;
                 }else{
-                    array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
-                    // if(rowsOutCount & 1){
-                    //     $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
-                    //     /* get the dynamic Div*/
-                    // }else{
-                    //     $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
-                    // }
+                 array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
                     rowsOutCount++;
                 }
             }
 
             $(document).on('click', '.btn_edit', function() {
-                var btnIndex = parseInt($(this).attr('data-id'));
-                var index = array.findIndex(array => array.ID == btnIndex);
+                let btnIndex = parseInt($(this).attr('data-id'));
+                let index = array.findIndex(array => array.ID ==  btnIndex);
 
                 console.log("btnIndex: " + btnIndex);
                 console.log("index: " + index);
@@ -78,9 +71,7 @@ $('document').ready(function(){
             });
 
             $(document).on('click', '.btn_delete', function(){
-                var btnIndex = parseInt($(this).attr('data-id'));
-
-                releaseRemove(btnIndex);
+                releaseRemove(parseInt($(this).attr('data-id')));
                 $(this).parent().remove();
             });
 
@@ -97,8 +88,7 @@ $('document').ready(function(){
         datatype: 'json',
         success: function(data){
             const jsonObject = eval(data);
-            //console.log(data);
-            for(i in jsonObject){
+            for(let i in jsonObject){
                 sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value, status: jsonObject[i].status});
             }          
         },
@@ -106,15 +96,21 @@ $('document').ready(function(){
             console.log(error);
         }
     });//end ajax request
-    var now = new Date();
-    var month = (now.getMonth() + 1);               
-    var day = now.getDate();
+    let now = new Date();
+    let month = (now.getMonth() + 1);               
+    let day = now.getDate();
     if (month < 10) 
         month = "0" + month;
     if (day < 10) 
         day = "0" + day;
-    var today = now.getFullYear() + '-' + month + '-' + day;
+    let today = now.getFullYear() + '-' + month + '-' + day;
+    
+    let maxDay = 9999 + '-' + month + '-' + day;
+    let minDay = 2000 + '-' + '01' + '-' + '01';
+
     $('#data').val(today);
+    $('#dataFilterIn').val(minDay);
+    $('#dataFilterUntil').val(maxDay);
 });
 
 btnCriarProduto.addEventListener('click', () => { 
@@ -160,7 +156,7 @@ function btnClose(event){
 
 wrapperBtnClose.forEach(btns => btns.addEventListener("click", btnClose));
 
-var sampleSuggestions = [];
+let sampleSuggestions = [];
 
   // Get references to the input field and the suggestions container
   const productInputs = document.querySelectorAll(".product");
@@ -304,13 +300,11 @@ addProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
     const clickedButtonValue = event.submitter.value;
-    var productNames = document.querySelector('.product').value;
-    //console.log(productName);
+    let productNames = document.querySelector('.product').value;
+    let productValuess = document.querySelector('.valor').value;
 
-    var productValuess = document.querySelector('.valor').value;
-    //console.log(productValues);
 
-    var id = 0;
+    let id = 0;
     if(clickedButtonValue != "sugestionsAdd" ){
         const suggestion = sampleSuggestions.find(suggestion => suggestion.name === productNames);
         id = suggestion ? suggestion.ID : null;
@@ -338,10 +332,6 @@ function releaseAdd(productNames, productValuess, dates){
         data: { function : 'releaseAdd', product: productNames, value: productValuess, date: dates, status: Status},
         datatype: 'json',
         success: function(data){
-            // console.log(productNames);
-            // console.log(productValuess);
-            // console.log(dates);
-            //console.log(data);
             const jsonObject = JSON.parse(data);
             console.log(jsonObject);
             if (jsonObject.status === "Added") {
@@ -383,8 +373,7 @@ function releaseRemove(id){
             const jsonObject = JSON.parse(data);
 
             if (jsonObject.status === "Deleted") {
-                var index = array.findIndex(array => array.ID === id);
-                array.splice(index, 1);
+                array.splice(array.findIndex(array => array.ID === id), 1);
             }
         },
         error: function(error){
@@ -404,37 +393,20 @@ function releaseEdit(productNames, productValuess, dates){
             const jsonObject = JSON.parse(data);
 
             if (jsonObject.status === "Edited") {
-                //var index = array.findIndex(array => array.ID == selectedEditID);
                 array[selectedEditID] = {ID: selectedEditID, product: productNames, value: parseFloat(productValuess), date: dates};
-                // array[index].ID = selectedEditID;
-                // array[index].product = productNames;
-                // array[index].value = parseFloat(productValuess);
-                // array[index].date = dates;
-
                 console.log(array[selectedEditID]);
-                var newContent;
-                var table = $('#table');
-                var specificItem;
+                let newContent;
+                let table = $('#table');
+                let specificItem;
 
-                if(array[selectedEditID].status == Status){
-                    if(selectedEditID & 1){
-                        newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                        specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
-                    }else{
-                        newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                        specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
-                    }
+                if(selectedEditID & 1){
+                    newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                    specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
                 }else{
-                    if(selectedEditID & 1){
-                        newContent = '<div class="rows" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                        specificItem = table.find('.rows[data-id="' + selectedEditID + '"]');
-                    }else{
-                        newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
-                        specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
-                    }
-                }
-
-                // Update the specific item's content
+                    newContent = '<div class="rows pair" data-id='+ selectedEditID +'><label>' + productNames + '</label><label>R$'+ productValuess +'</label><label>'+ dates +'</label><button class="btn_edit" data-id='+ selectedEditID + '>edit</button><button class="btn_delete" data-id='+ selectedEditID +'>delete</button></div>';
+                    specificItem = table.find('.rows.pair[data-id="' + selectedEditID + '"]');
+                }    
+            
                 specificItem.replaceWith(newContent);
             }
         },
@@ -448,9 +420,9 @@ function releaseEdit(productNames, productValuess, dates){
 releaseProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
 
-    var productNames = document.querySelectorAll('.product')[1].value;
-    var productValuess = document.querySelectorAll('.valor')[1].value;
-    var date = document.querySelector('#data').value;
+    let productNames = document.querySelectorAll('.product')[1].value;
+    let productValuess = document.querySelectorAll('.valor')[1].value;
+    let date = document.querySelector('#data').value;
 
     releaseAdd(productNames, productValuess, date);
 });
@@ -459,9 +431,9 @@ const editProductForm = document.getElementById('editProduct');
 
 editProductForm.addEventListener("submit", function(event) {
     event.preventDefault();
-    var productNames = document.querySelectorAll('.product')[2].value;
-    var productValuess = document.querySelectorAll('.valor')[2].value;
-    var date = document.querySelector('#data').value;
+    let productNames = document.querySelectorAll('.product')[2].value;
+    let productValuess = document.querySelectorAll('.valor')[2].value;
+    let date = document.querySelector('#data').value;
 
     releaseEdit(productNames, productValuess, date);
 });
@@ -478,7 +450,7 @@ function updateTable() {
     }
 
     let c = 0;
-    for(i in array){
+    for(let i in array){
         if(array[i].status == Status){
             if(c & 1){
                 $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
@@ -522,50 +494,126 @@ graphic.addEventListener('click', function(){
     Status = "graphic";
     
     updateTable();
+    let graphicArray = [];
+    $('#table').prepend('<canvas id="myChart"></canvas>');
 
-    var graphicArray = [];
+    let maxValue = array[0].value;
+    let minDays = document.querySelector("#dataFilterIn").value.split("-");
+    let maxDays = document.querySelector("#dataFilterUntil").value.split("-");
 
-
-    $('#table').prepend('<canvas id="myChart" width="400" height="200"></canvas>');
-
+    graphicArray.push({product: array[0].product, value: parseInt(array[0].value), date: array[0].date, count: 1});
     
-    //const width = canvas.width;
-    //const height = canvas.height;
-
-    var maxValue = array[0].value;
-    graphicArray.push({product: array[0].product, value: parseInt(array[0].value), date: array[0].date});
-    
-
     for(let i = 1; i < array.length; i++){
         if(maxValue < array[i].value){
             maxValue = array[i].value;
         }
-        if(graphicArray.findIndex(graphicsArray => graphicsArray.product == array[i].product) > -1){
-            var index = graphicArray.findIndex(graphic => graphic.product == array[i].product);
-            graphicArray[index].value = parseInt(graphicArray[index].value) + parseInt(array[i].value);
-        }else{
-            graphicArray.push({product: array[i].product, value: array[i].value, date: array[i].date});
-        }
-        
-    }
-    console.log(maxValue);
-    const canvas = document.getElementById('myChart');
-    const ctx = canvas.getContext('2d');
-    var myChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-        labels: graphicArray.map(graphic => graphic.product),
-        datasets: [{
-            label: '# of Votes',
-            data: graphicArray.map(graphic => graphic.value),
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)'
-            ]
-        }]
-    }
-    });
 
+        let date = array[i].date.split("-");
+        if((date[0] >= minDays[0] && date[0] <= maxDays[0]) && (date[1] >= minDays[1] && date[1] <= maxDays[1]) && (date[2] >= minDays[2] && date[2] <= maxDays[2])){
+            if(graphicArray.findIndex(graphicsArray => graphicsArray.product == array[i].product) > -1){
+                let index = graphicArray.findIndex(graphic => graphic.product == array[i].product);
+                graphicArray[index].value = parseInt(graphicArray[index].value) + parseInt(array[i].value);
+                graphicArray[index].count++;
+            }else{
+                graphicArray.push({product: array[i].product, value: array[i].value, date: array[i].date, count: 1});
+            }
+        }       
+    }
+    const ctx = document.getElementById('myChart');
+
+    try{
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: graphicArray.map(graphicArrays => graphicArrays.product),
+              datasets: [{
+                label: 'R$',
+                data: graphicArray.map(graphicArrays => graphicArrays.value),
+                borderWidth: 1
+              },
+              {
+                  label: 'Quantidade',
+                  data: graphicArray.map(graphicArrays => graphicArrays.count),
+                  borderWidth: 1
+              }    
+                  
+              ]
+          },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+    }catch(e) {
+        console.log(e.message);
+    }
+
+});
+
+const btnFilter = document.querySelector('#btnFilter');
+
+btnFilter.addEventListener('click',function(){
+    Status = "graphic";
+    
+    updateTable();
+    let graphicArray = [];
+    $('#table').prepend('<canvas id="myChart"></canvas>');
+
+    let maxValue = array[0].value;
+    let minDays = document.querySelector("#dataFilterIn").value.split("-");
+    let maxDays = document.querySelector("#dataFilterUntil").value.split("-");
+
+    graphicArray.push({product: array[0].product, value: parseInt(array[0].value), date: array[0].date, count: 1});
+    
+    for(let i = 1; i < array.length; i++){
+        if(maxValue < array[i].value){
+            maxValue = array[i].value;
+        }
+
+
+        let date = array[i].date.split("-");
+        if((date[0] >= minDays[0] && date[0] <= maxDays[0]) && (date[1] >= minDays[1] && date[1] <= maxDays[1]) && (date[2] >= minDays[2] && date[2] <= maxDays[2])){
+            if(graphicArray.findIndex(graphicsArray => graphicsArray.product == array[i].product) > -1){
+                let index = graphicArray.findIndex(graphic => graphic.product == array[i].product);
+                graphicArray[index].value = parseInt(graphicArray[index].value) + parseInt(array[i].value);
+                graphicArray[index].count++;
+            }else{
+                graphicArray.push({product: array[i].product, value: array[i].value, date: array[i].date, count: 1});
+            }
+        }       
+    }
+    const ctx = document.getElementById('myChart');
+
+    try{
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: graphicArray.map(graphicArrays => graphicArrays.product),
+              datasets: [{
+                label: 'R$',
+                data: graphicArray.map(graphicArrays => graphicArrays.value),
+                borderWidth: 1
+              },
+              {
+                  label: 'Quantidade',
+                  data: graphicArray.map(graphicArrays => graphicArrays.count),
+                  borderWidth: 1
+              }    
+                  
+              ]
+          },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true
+                }
+              }
+            }
+          });
+    }catch(e) {
+        console.log(e.message);
+    }
 });

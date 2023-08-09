@@ -6,9 +6,9 @@ session_start();
 
 header('Content-Type: application/json');
 
-$name = $_POST['name'];
-$email = $_POST['email'];
-$pass = $_POST['pass'];
+$name = $mysqli->real_escape_string($_POST['name']);
+$email = $mysqli->real_escape_string($_POST['email']);
+$pass = $mysqli->real_escape_string($_POST['pass']);
 
 if(empty($name) || empty($email) || empty($pass)){
     die(json_encode(""));

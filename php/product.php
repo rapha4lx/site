@@ -1,7 +1,6 @@
 <?php
 
 $function = $_POST['function'];
-// $email = $_POST['email'];
 $id = $_POST['id'];
 $product = $_POST['product'];
 $value = $_POST['value'];
@@ -17,6 +16,11 @@ if(!$_SESSION['logged'] && isset($email)){
 }
 
 switch ($function){
+
+    default:
+
+    break;
+
     case 'login':
         Login($email);
     break;
@@ -52,8 +56,8 @@ switch ($function){
 }
 
 function Login($email){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $user_db_name = getDbName($email);
     $sql_query = $mysqli->query("SELECT * FROM `$user_db_name`");
@@ -67,8 +71,8 @@ function Login($email){
 }
 
 function sugestions($email){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $user_db_name = getDbName($email);
     $sql_query = $mysqli->query("SELECT `ID`, `product`, `value`, `status` FROM `site_users_product` WHERE `email` = '$email';");
@@ -83,8 +87,8 @@ function sugestions($email){
 }
 
 function sugestionsRemove($email, $id){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $sql_code = "DELETE FROM `site_users_product` WHERE `ID` = '$id' AND `email` = '$email'";
     $sql_query = $mysqli->query($sql_code);
@@ -98,8 +102,8 @@ function sugestionsRemove($email, $id){
 }
 
 function releaseRemove($email, $id){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $user_db_name = getDbName($email);
     $sql_code = "DELETE FROM $user_db_name WHERE ID = '$id'";
@@ -113,8 +117,8 @@ function releaseRemove($email, $id){
 }
 
 function sugestionsEdit($email, $id,$product, $value){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $sql_code = "UPDATE `site_users_product` SET `product`='$product', `value`= '$value' WHERE `ID` = '$id' AND `email` = '$email'";
     $sql_query = $mysqli->query($sql_code);
@@ -129,8 +133,8 @@ function sugestionsEdit($email, $id,$product, $value){
 }
 
 function releaseEdit($email, $id, $product, $value, $date){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $user_db_name = getDbName($email);
     $sql_code = "UPDATE `$user_db_name` SET `product`='$product', `value`= $value, `date`= '$date' WHERE `ID` = $id ";
@@ -145,12 +149,11 @@ function releaseEdit($email, $id, $product, $value, $date){
 }
 
 function sugestionsAdd($email, $product, $value, $status){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $sql_code = "INSERT INTO `site_users_product`(`email`, `product`, `value`, `status`) VALUES ('$email','$product','$value', '$status')";
-    $sql_query = $mysqli->query($sql_code);
-    if($sql_query){
+    if($mysqli->query($sql_code)){
         $lastID = mysqli_insert_id($mysqli);
         $json_obj = array("status" => "Added", "ID" => $lastID);
         echo json_encode($json_obj);
@@ -160,15 +163,15 @@ function sugestionsAdd($email, $product, $value, $status){
 }
 
 function releaseAdd($email, $product, $value, $date, $status){
-    include ('connection.php');
-    include ('commands.php');
+    include_once 'connection.php';
+    include_once 'commands.php';
 
     $user_db_name = getDbName($email);
 
-    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `date`, `status`) VALUES ('$product', $value, '$date', '$status')";
-    $sql_query = $mysqli->query($sql_code); //or die (json_encode($mysqli->error));
+    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `date`, `status`) VALUES ('$product', $value, '$date', '$status');";
+    //$sql_query = $mysqli->query($sql_code); //or die (json_encode($mysqli->error));
     
-    if($sql_query && mysqli_affected_rows($mysqli) > 0){
+    if($mysqli->query($sql_code) && mysqli_affected_rows($mysqli) > 0){
         $lastID = mysqli_insert_id($mysqli);
         $json_obj = array("status" => "Added", "ID" => $lastID);
         echo json_encode($json_obj);
@@ -176,7 +179,3 @@ function releaseAdd($email, $product, $value, $date, $status){
         echo json_encode("fail");
     }
 }
-
-
-
-?>

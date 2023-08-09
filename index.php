@@ -1,7 +1,12 @@
 <?php
     session_start();
 
-    if(isset($_SESSION['email']) && isset($_SESSION['pass'])   )
+
+    $email = $mysqli->real_escape_string($_SESSION['email']);
+    $pass = $mysqli->real_escape_string($_SESSION['pass']);
+
+
+    if(isset($email) && isset($pass))
     {
         $_SESSION['logged'] = true;
         header('Location: product.php');

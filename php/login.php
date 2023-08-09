@@ -5,8 +5,8 @@ header('Content-Type: application/json');
 
 session_start();
 
-$email = $_POST['email'];
-$pass = $_POST['pass'];
+$email = $mysqli->real_escape_string($_POST['email']);
+$pass = $mysqli->real_escape_string($_POST['pass']);
 $name = "";
 
 $sql_code = "SELECT `email`, `pass`, `name` FROM `site_users` WHERE `email` = '$email' AND `pass` = '$pass'";

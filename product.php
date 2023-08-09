@@ -1,9 +1,7 @@
 <?php
     session_start();
 
-    if($_SESSION['logged']){
-
-    }else{
+    if(!$mysqli->real_escape_string($_SESSION['logged'])){
         header('Location: index.php');
         exit();
     }
@@ -19,6 +17,11 @@
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/product.css">
+
+    <script src="
+https://cdn.jsdelivr.net/npm/chart.js@4.3.3/dist/chart.umd.min.js
+"></script>
+
     
 </head>
 
@@ -36,11 +39,6 @@
 <div class="main">
     
     <div id="myLeftPanel" class="leftPanel">
-        <!--
-            <a href="#">Entrada</a>
-            <a href="#">Saida</a>
-            <a href="#">Graficos</a>
-        -->
         <button id="entrada" class="panelButton">Entrada</button>
         <button id="saida" class="panelButton">Saida</button>
         <button id="Graficos" class="panelButton">Graficos</button>    
@@ -52,6 +50,15 @@
             <div class="buttons">
                 <button id="btnCriarProduto" class="btn">Criar produto</button>
                 <button id="btnLancarProduto" class="btn">Lançar produto</button>
+                <button id="btnFilter" class="btn">Filtrar</button>
+                <div> 
+                    <h2>De</h2>
+                    <input type="date" id="dataFilterIn" name="data" class="date" required></input>
+                </div>
+                <div> 
+                    <h2>Ate</h2>
+                    <input type="date" id="dataFilterUntil" name="data" class="date" required></input>
+                </div>
             </div>
             
             <div class="wrapper-addProduct">
@@ -84,9 +91,6 @@
                         <button type="submit" value="sugestionsDelete" class="btn">
                             <span >Deletar</span>
                         </button>
-                        <!-- <input type="submit" value="sugestionsAdd" class="btn"> -->
-                        <!-- <input type="submit" value="sugestionsEdit" class="btn">
-                        <input type="submit" value="sugestionsDelete" class="btn"> -->
 
                     </form>
                 </div>
@@ -123,7 +127,6 @@
                             <span >Adicionar</span>
                         </button>
                         
-                        <!-- <input type="submit" value="releaseProduct" class="btn"> -->
                         
                     </form>
                 </div>
@@ -160,15 +163,14 @@
                             <span>Editar</span>
                         </button>
 
-                        <!-- <input type="submit" value="releaseProduct" class="btn"> -->
-
                     </form>
                 </div>
             </div>
 
             <div id="table" class="table">
 
-            </div>        
+            </div>  
+                  
         </div>
 
     </div>        
@@ -176,9 +178,7 @@
 </div>
 
 
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.3/chart.min.js"></script>
     <script src="js/product.js"></script>
 
 
