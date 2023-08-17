@@ -28,7 +28,7 @@ do{
     $sql_query = $mysqli->query($sql_code) or  die ("fail: ". $mysqli->error);
 }while($sql_query->num_rows > 0);
 
-$sql_code = "INSERT INTO `site_users` (`name`, `email`, `pass`, `db_name`) VALUES ('$name', '$email', '$pass', '$tableName');";
+$sql_code = "INSERT INTO `site_users` (`email`, `pass`, `db_name`) VALUES ('$email', '$pass', '$tableName');";
 $mysqli->query($sql_code);
 
 $sql_code = "CREATE TABLE {$tableName} (

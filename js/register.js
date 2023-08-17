@@ -12,7 +12,18 @@ loginForm.addEventListener('submit', (e) =>{
     }
     console.log("fail");
 
-    
+    $.ajax({
+        url: "php/register.php", // Set the server-side script URL here
+        method: "POST", // Set the HTTP method here
+        data: {
+            email: email.value,
+            pass: senha.value
+        },
+        datatype: 'json'
+    }).done(function(data) {
+        // Handle the response from the server if required
+        window.location.href = "product.php";
+    });    
 
 
 
