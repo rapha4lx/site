@@ -4,5 +4,5 @@ function OpenPanel(){
     // btn_open_menu.classList.add("invisible");
     // panel.classList.add('visible');
 
-    window.location.href = "login.html";
+    window.location.href = "login.php";
 }

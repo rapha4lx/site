@@ -17,10 +17,10 @@
             <label for="toggle">&#9776;</label>
             <input type="checkbox" id="toggle">
             <div class="menu">
-                <a href="index.html">Home</a>
-                <a href="servico.html">Servi&ccedil;os</a>
-                <a href="about.html">Sobre</a>
-                <a href="contact.html">Contato</a>
+                <a href="index.php">Home</a>
+                <a href="servico.php">Servi&ccedil;os</a>
+                <a href="about.php">Sobre</a>
+                <a href="contact.php">Contato</a>
             </div>
         </div>
     </header>
@@ -42,7 +42,7 @@
 
             <div class="login-register">
                 <p>Ainda não tem uma conta?
-                    <a href="register.html" class="login-Link">Cadastro</a>
+                    <a href="register.php" class="login-Link">Cadastro</a>
                 </p>
             </div>
 
