@@ -47,18 +47,22 @@
                     <input type="text" id="produtoFilter" required>
                     <label>Produto</label>
                 </div>              
-                
-                <div class="input-box" style="width: 120px;">
-                    <span class="icon"><ion-icon name="calendar"></ion-icon></span>
-                    <input type="date" id="DataComeco" required></input>
-                    <label>Data Comeco</label>
-                </div>
+              
                 
                 <div class="input-box" style="width: 120px;">
                     <span class="icon"><ion-icon name="calendar"></ion-icon></span>
                     <input type="date" id="DataTermino" required></input>
-                    <label>Data Termino</label>
+                    <label>De</label>
                 </div>
+
+
+                <div class="input-box" style="width: 120px;">
+                    <span class="icon"><ion-icon name="calendar"></ion-icon></span>
+                    <input type="date" id="DataComeco" required></input>
+                    <label>Até</label>
+                </div>
+                
+              
                 
                 <select id="category">
                     <optgroup label="Produtos">
@@ -81,14 +85,7 @@
 
             
             <div id="table" class="contents">
-                <div class="content">
-                    <label>Status/saida/entrada</label>
-                    <label>nome do produto</label>
-                    <label>Valor</label>
-                    <label>10-20-2000</label>
-                    <button type="button" class="btn_content" onclick="createPanel('editar produto')">Editar</button>
-                    <button type="button" class="btn_content" onclick="Delete()">Deletar</button>
-                </div>
+                
                 
             </div>
             

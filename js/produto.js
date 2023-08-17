@@ -36,9 +36,9 @@ $('document').ready(function(){
             if(jsonObject[i].status == Status){
                array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
                     if(rowsReleaseCount & 1){
-                    $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                        $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'> <label>Entrada</label> <label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_content" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_content" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                     }else{
-                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                        $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'> <label>Entrada</label> <label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_content" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_content" data-id='+ jsonObject[i].ID +'>delete</button></div>');
                     }
                     rowsReleaseCount++;
                 }else{
@@ -654,27 +654,31 @@ function updateTable() {
         for(let i in array){
             if(array[i].status == Status){
                 if(c & 1){
-                    $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+                    $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_content" data-id='+ array[i].ID + '>edit</button><button class="btn_content" data-id='+ array[i].ID +'>delete</button></div>');
                     /* get the dynamic Div*/
                 }else{
-                    $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+                    $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_content" data-id='+ array[i].ID +' >edit</button><button class="btn_content" data-id='+ array[i].ID +'>delete</button></div>');
                 }
                 c++;
             }
         }    
     }else if(Status == "AutoComplete"){
-        // let c = 0;
-        // for(let i in array){
-        //     if(array[i].status == Status){
-        //         if(c & 1){
-        //             $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
-        //             /* get the dynamic Div*/
-        //         }else{
-        //             $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
-        //         }
-        //         c++;
-        //     }
-        // }    
+        let c = 0;
+        for(let i in sampleSuggestions){
+            
+            console.log("AutoComplete2");
+            
+            if(c & 1){
+                $('#table').prepend('<div class="rows" data-id='+ sampleSuggestions[i].ID +'> <label>'+ sampleSuggestions[i].status +'</label> <label>' + sampleSuggestions[i].product + '</label><label>R$'+ sampleSuggestions[i].value +'</label><button class="btn_content" data-id='+ sampleSuggestions[i].ID + '>edit</button><button class="btn_content" data-id='+ sampleSuggestions[i].ID +'>delete</button></div>');
+                /* get the dynamic Div*/
+                console.log(c);
+            }else{
+                $('#table').prepend('<div class="rows pair" data-id='+ sampleSuggestions[i].ID +'> <label>'+ sampleSuggestions[i].status +'</label> <label>'+ sampleSuggestions[i].product + '</label><label>R$'+ sampleSuggestions[i].value +'</label><button class="btn_content" data-id='+ sampleSuggestions[i].ID +' >edit</button><button class="btn_content" data-id='+ sampleSuggestions[i].ID +'>delete</button></div>');
+                console.log(c);
+            }
+            c++;
+            
+        }    
     }
 }
 
@@ -695,8 +699,8 @@ function createGraphic(){
     $('#table').prepend('<canvas id="myChart"></canvas>');
 
     let maxValue = array[0].value;
-    let minDays = document.querySelector("#DataComeco").value.split("-");
-    let maxDays = document.querySelector("#DataTermino").value.split("-");
+    let minDays = document.getElementById("DataComeco").value.split("-");
+    let maxDays = document.getElementById("DataTermino").value.split("-");
 
     graphicArray.push({product: array[0].product, value: parseInt(array[0].value), date: array[0].date, count: 1});
     
@@ -704,7 +708,6 @@ function createGraphic(){
         if(maxValue < array[i].value){
             maxValue = array[i].value;
         }
-
 
         let date = array[i].date.split("-");
         if((date[0] >= minDays[0] && date[0] <= maxDays[0]) && (date[1] >= minDays[1] && date[1] <= maxDays[1]) && (date[2] >= minDays[2] && date[2] <= maxDays[2])){
