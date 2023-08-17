@@ -35,6 +35,7 @@ $sql_code = "CREATE TABLE {$tableName} (
     ID INT(11) NOT NULL AUTO_INCREMENT,
     product VARCHAR(1000),
     value FLOAT NULL,
+    desconto FLOAT NULL,
     date VARCHAR(255),
     PRIMARY KEY (ID),
     status VARCHAR(50)

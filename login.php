@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['email']) && isset($_SESSION['pass'])   )
+    {
+        $_SESSION['logged'] = true;
+        header('Location: produto.php');
+        exit();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,6 +64,8 @@
 </div>  
 
     
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 <script src="js/login.js"></script>

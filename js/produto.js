@@ -14,7 +14,94 @@ document.getElementById("DataTermino").value = "2010-01-01";
 
 
 
+
+let array = [];
+let rowsReleaseCount = 0;
+let rowsOutCount = 0;
+
+let selectedEditID = 0;
+let selectedDivID = 0;
 let Status = "release"; 
+
+$('document').ready(function(){
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'login'},
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+
+            for(let i in jsonObject){            
+            if(jsonObject[i].status == Status){
+               array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
+                    if(rowsReleaseCount & 1){
+                    $('#table').prepend('<div class="rows" data-id='+ jsonObject[i].ID +'><label>' + jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID + '>edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    }else{
+                    $('#table').prepend('<div class="rows pair" data-id='+ jsonObject[i].ID +'><label>'+ jsonObject[i].product + '</label><label>R$'+ jsonObject[i].value +'</label><label>'+ jsonObject[i].date +'</label><button class="btn_edit" data-id='+ jsonObject[i].ID +' >edit</button><button class="btn_delete" data-id='+ jsonObject[i].ID +'>delete</button></div>');
+                    }
+                    rowsReleaseCount++;
+                }else{
+                 array.push({ID: jsonObject[i].ID, product: jsonObject[i].product, value: jsonObject[i].value, date: jsonObject[i].date, status: jsonObject[i].status});
+                    rowsOutCount++;
+                }
+            }
+
+            $(document).on('click', '.btn_edit', function() {
+                let btnIndex = parseInt($(this).attr('data-id'));
+                let index = array.findIndex(array => array.ID ==  btnIndex);
+
+                console.log("btnIndex: " + btnIndex);
+                console.log("index: " + index);
+                console.log("array: " + array[index].ID);
+
+                productInputs.forEach(input => {
+                    input.value = array[index].product;
+                });
+                productValue.forEach(value => {
+                    value.value = array[index].value;
+                });
+
+                selectedEditID = array[index].ID;
+                selectedDivID = $(this).parent().index();
+                console.log("Selected divID: " + selectedDivID);
+
+                document.querySelectorAll("#data")[1].value = array[index].date;
+                if(wrapperEditProduct.className == "wrapper-editProduct"){
+                    wrapperAddProduct.classList.remove('active');
+                    wrapperReleaseProduct.classList.remove('active');
+                    wrapperEditProduct.classList.add('active');
+                }
+            });
+
+            $(document).on('click', '.btn_delete', function(){
+                releaseRemove(parseInt($(this).attr('data-id')));
+                $(this).parent().remove();
+            });
+
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+
+    $.ajax({
+        url: "php/product.php", // Set the server-side script URL here
+        type: "POST", // Set the HTTP method here
+        data: { function : 'sugestions'},
+        datatype: 'json',
+        success: function(data){
+            const jsonObject = eval(data);
+            for(let i in jsonObject){
+                sampleSuggestions.push({ID: jsonObject[i].ID, name: jsonObject[i].product, value: jsonObject[i].value, status: jsonObject[i].status});
+            }          
+        },
+        error: function(error){
+            console.log(error);
+        }
+    });//end ajax request
+});
+
 function showAndHide(value){
     if(value === "entrada"){
         document.querySelectorAll("#AutoComplete")[0].style.display = 'none';
@@ -24,7 +111,9 @@ function showAndHide(value){
 
         document.getElementById("category").style.display = 'none';
 
+        
         Status = "release";
+        updateTable();
     }else if(value === "saida"){
         document.querySelectorAll("#AutoComplete")[0].style.display = 'none';
         document.querySelectorAll("#entrada")[0].style.display = 'none';
@@ -34,6 +123,7 @@ function showAndHide(value){
         document.getElementById("category").style.display = 'none';
 
         Status = "out";
+        updateTable();
     }else if(value === "grafico"){
         document.querySelectorAll("#AutoComplete")[0].style.display = 'none';
         document.querySelectorAll("#entrada")[0].style.display = 'none';
@@ -51,7 +141,7 @@ function showAndHide(value){
         Status = "AutoComplete";
 
         document.getElementById("category").style.display = 'block';
-
+        updateTable();
     }
 }
 showAndHide("entrada");
@@ -229,7 +319,6 @@ function releaseEdit(productNames, productValuess, dates){
         }
     });//end ajax request
 }
-
 
 function createPanel(value){
     //document.getElementById('float_panel').innerHTML = "";
@@ -436,6 +525,35 @@ function createPanel(value){
             '<input type="submit" class="btn" value="Criar Produto">';
             console.log(value);
         break;
+    
+        case 'editar autoComplete':
+            panel += '<h1 class="mid-panel-titulo">Editar</h1>'+ //Name Panel
+            '<input type="button" class="close_btn_form" value="X" onclick="return ClosePanel()">'+
+            '<form id="editProduct" action="/" method="post">'+ //Form Name
+            
+            //start Product input
+            '<div class="input-box">'+
+            '<span class="icon"><ion-icon name="bag-add"></ion-icon></span>'+
+            '<input type="text" id="produto" required>'+
+            '<label>Produto</label>'+
+            '</div>'+
+            //end input
+
+            //start Value input
+            '<div class="input-box">'+
+            '<span class="icon"><ion-icon name="card"></ion-icon></span>'+
+            '<input type="number" min="0.01" max="100000" step="0.01" id="value" required>'+
+            '<label>Valor</label>'+
+            '</div>'+
+            //end input
+
+            //div error message
+            '<div #id="error"></div>'+
+
+            //buttun send
+            '<input type="submit" class="btn" value="Criar Produto">';
+            console.log(value);
+        break;
     }
 
     panel += '</form>'+
@@ -531,23 +649,34 @@ function updateTable() {
         return;
     }
 
-    let c = 0;
-    for(let i in array){
-        if(array[i].status == Status){
-            if(c & 1){
-                $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
-                /* get the dynamic Div*/
-            }else{
-                $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+    if(Status == "release" || Status == "out"){
+        let c = 0;
+        for(let i in array){
+            if(array[i].status == Status){
+                if(c & 1){
+                    $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+                    /* get the dynamic Div*/
+                }else{
+                    $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+                }
+                c++;
             }
-            c++;
-        }
+        }    
+    }else if(Status == "AutoComplete"){
+        // let c = 0;
+        // for(let i in array){
+        //     if(array[i].status == Status){
+        //         if(c & 1){
+        //             $('#table').prepend('<div class="rows" data-id='+ array[i].ID +'><label>' + array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID + '>edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+        //             /* get the dynamic Div*/
+        //         }else{
+        //             $('#table').prepend('<div class="rows pair" data-id='+ array[i].ID +'><label>'+ array[i].product + '</label><label>R$'+ array[i].value +'</label><label>'+ array[i].date +'</label><button class="btn_edit" data-id='+ array[i].ID +' >edit</button><button class="btn_delete" data-id='+ array[i].ID +'>delete</button></div>');
+        //         }
+        //         c++;
+        //     }
+        // }    
     }
 }
-
-
-
-let array = [];
 
 function createGraphic(){
     document.getElementById('float_panel').innerHTML = "";
@@ -621,7 +750,13 @@ function createGraphic(){
     }
 }
 
+function Delete(){
+    let btnIndex = parseInt($(this).attr('data-id'));
 
+    releaseRemove(btnIndex);
+    $(this).parent().remove();
+}
 
+let sampleSuggestions = [];
 
 
