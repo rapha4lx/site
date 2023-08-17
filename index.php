@@ -1,119 +1,57 @@
-<?php
-    session_start();
-    include 'php/connection.php';
-
-    $email = $mysqli->real_escape_string($_SESSION['email']);
-    $pass = $mysqli->real_escape_string($_SESSION['pass']);
-
-
-    if(!empty($email) && !empty($pass))
-    {
-        $_SESSION['logged'] = true;
-        header('Location: product.php');
-        exit();
-    }
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>MoneyFlow Control</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/index.css">
-
-    
+    <script src="js/index.js"></script>
 </head>
 
 <body>
-
+<div class="container">
     <header>
-        <h2 class="logo">Logo</h2>
-        <nav class="navigation">
-            <a href="#">About</a>
-            <a href="#">Service</a>
-            <a href="#">Contact</a>
-        </nav>
+        <h2>MoneyFlow Control</h2>
+        <div class="nav">
+            <label for="toggle">&#9776;</label>
+            <input type="checkbox" id="toggle">
+            <div class="menu">
+                <a href="index.html">Home</a>
+                <a href="servico.html">Servi&ccedil;os</a>
+                <a href="about.html">Sobre</a>
+                <a href="contact.html">Contato</a>
+            </div>
+        </div>
     </header>
 
-    <button class="btnLogin-popup">Login</button>
-
-    <div class="wrapper">
-        <span class="icon-close"><ion-icon name="close"></ion-icon></span>
-
-        <div class="form-box login">
-            <h2>Login</h2>
-            <form id="login">
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                    <input type="text" id="email" required>
-                    <label>Email</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-open"></ion-icon></span>
-                    <input type="password" id="password" required>
-                    <label>Password</label>
-                </div>
-                <div class="remember-forgot">
-                    <label><input type="checkbox">Remember me</label>
-                    <a href="#">Forgot Password?</a>
-                </div>
-
-                <input type="submit" value="Login" class="btn">
-                
-                <div class="login-register">
-                    <p>Don't have an account?
-                        <a href="#" class="register-link">Register</a>
-                    </p>
-                </div>
-            </form>
+        <div class="mid_text">
+            <h1 class="titulo">Bem-vindo ao nosso sistema inovador de gestão financeira para lojas!</h2>
+            <p>Se você é um empreendedor apaixonado que busca aprimorar o controle financeiro do seu negócio, você veio ao lugar certo. Nosso site oferece uma solução abrangente e intuitiva para acompanhar suas entradas e saídas de maneira eficiente, permitindo que você tome decisões informadas e estratégicas para o crescimento sustentável da sua loja.</p>
+            <p>ter o poder de visualizar suas finanças de forma clara e organizada, sem complicações. Com a nossa plataforma, você pode facilmente registrar todas as transações, desde vendas até despesas, com apenas alguns cliques. Através de gráficos dinâmicos e relatórios detalhados, você terá uma visão completa do panorama financeiro da sua loja, identificando tendências, oportunidades e áreas que necessitam de ajustes.</p>
+            <p>Mas isso não é tudo. Nossa ferramenta permite filtrar e analisar os dados por datas específicas e itens, garantindo que você possa focar nas informações que realmente importam para o seu negócio. A transparência e a personalização são os pilares do nosso serviço, capacitando você a tomar decisões embasadas e a maximizar o potencial de lucro da sua loja.</p>       
         </div>
+        
 
-        <div class="form-box register">
-            <h2>Registration</h2>
-            <form id="register">
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="person"></ion-icon></span>
-                    <input type="text" id="username" required>
-                    <label>Username</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
-                    <input type="text" id="email" required>
-                    <label>Email</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-open"></ion-icon></span>
-                    <input type="password" id="password" required>
-                    <label>Password</label>
-                </div>
-                <div class="remember-forgot">
-                    <label><input type="checkbox" required>Agree to the terms & conditions</label>
-                </div>
+        <button type="button" class="btn_open_menu" onclick="return OpenPanel()">login</button>
+<!-- 
+    <div class="mid-panel">
+        <h1 class="mid-panel-titulo">Login</h1>
+        <input type="button" class="close_btn_form" value="X" onclick="return ClosePanel()"><br><br>
+        <form action="" method="post">
+            
+            <input type="email" placeholder="Email"><br><br>
+            <input type="password" placeholder="pass"><br><br>
 
-                <input type="submit" value="Register" class="btn">
-                
-                
-                <div class="login-register">
-                    <p>Already have account?
-                        <a href="#" class="login-Link">Login</a>
-                    </p>
-                </div>
-            </form>
-        </div>
-    </div>
+            <input type="submit" class="login" id="Login" value="Login" onclick="return Login()">
+            <input type="submit" class="register" id="Register" value="Register" onclick="return Register()">
+        </form>
+    </div> -->
+</div>  
 
     
+        
+
     
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <script src="js/index.js"></script>
-
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
-
 </html>
