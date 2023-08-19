@@ -121,7 +121,7 @@
     /* display: flex; */
     /* display: row; */
     flex-grow : 1;
-    overflow: hidden;
+    overflow-y: auto;
 }
 .panel_button{
     display: flex;
@@ -199,11 +199,43 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
-#myChart{
+/* Estilizando as sugestões */
+.suggestions {
+    position: absolute; /* Posição absoluta em relação ao elemento pai */
+    padding-bottom: 2px;
+    left: 0; /* Alinha as sugestões com o campo de entrada */
+    z-index: 999; /* Z-index alto para garantir que as sugestões fiquem acima de outros elementos */
+    background-color: white; /* Cor de fundo das sugestões (pode personalizar como desejar) */
+    border: 1px solid #ccc; /* Adiciona uma borda às sugestões (opcional) */
+    cursor: default; /* Define o cursor do mouse como padrão, para indicar que não é clicável */
+
+}
+.suggestions .suggestion {
+    padding: 5px; /* Espaçamento interno para melhorar a aparência (opcional) */
+    cursor: pointer; /* Define o cursor do mouse como apontador, para indicar que é clicável */
+}
+/* Estilizando as sugestões individuais quando o mouse está sobre elas */
+.suggestions .suggestion:hover {
+     background-color: #f0f0f0; /* Cor de fundo quando o mouse está sobre a sugestão (opcional) */
+}
+.myChart{
     width: 100%;
-    height: 100px;
+    height: 40vh;
+
 }
 
+
+@media screen and (max-width: 800px) {
+    .myChart {
+            display: block;
+            float: none;
+            width: 100%;
+            margin-top: 0px;
+            margin-right:0px;
+            margin-left:0px;
+            height: auto;
+    }
+}
 
 
 

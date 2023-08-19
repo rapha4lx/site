@@ -4,6 +4,7 @@ $function = $_POST['function'];
 $id = $_POST['id'];
 $product = $_POST['product'];
 $value = $_POST['value'];
+$desconto = $_POST['descont'];
 $date = $_POST['date'];
 $status = $_POST['status'];
 
@@ -42,7 +43,7 @@ switch ($function){
         break;
 
     case 'releaseAdd':
-        releaseAdd($email, $product, $value, $date, $status);
+        releaseAdd($email, $product, $value, $desconto, $date, $status);
     break;
     
     case 'releaseDelete':
@@ -50,8 +51,8 @@ switch ($function){
         break;
     
     case'releaseEdit':
-        releaseEdit($email,$id,$product,$value,$date);
-    break;    
+        releaseEdit($email,$id,$product,$value,$desconto,$date);
+    break;
 
 }
 
@@ -75,7 +76,7 @@ function sugestions($email){
     include_once 'commands.php';
 
     $user_db_name = getDbName($email);
-    $sql_query = $mysqli->query("SELECT `ID`, `product`, `value`, `status` FROM `site_users_product` WHERE `email` = '$email';");
+    $sql_query = $mysqli->query("SELECT `ID`, `product`, `value`,`status` FROM `site_users_product` WHERE `email` = '$email';");
 
     $Array = array();
 
@@ -132,12 +133,12 @@ function sugestionsEdit($email, $id,$product, $value){
     }
 }
 
-function releaseEdit($email, $id, $product, $value, $date){
+function releaseEdit($email, $id, $product, $value, $desconto, $date){
     include_once 'connection.php';
     include_once 'commands.php';
 
     $user_db_name = getDbName($email);
-    $sql_code = "UPDATE `$user_db_name` SET `product`='$product', `value`= $value, `date`= '$date' WHERE `ID` = $id ";
+    $sql_code = "UPDATE `$user_db_name` SET `product`='$product', `value`= $value, `desconto` = $desconto `date`= '$date' WHERE `ID` = $id ";
     $sql_query = $mysqli->query($sql_code); //or die ("fail: ". $mysqli->error);
     if($sql_query){
         $lastID = mysqli_insert_id($mysqli);
@@ -162,13 +163,14 @@ function sugestionsAdd($email, $product, $value, $status){
     }
 }
 
-function releaseAdd($email, $product, $value, $date, $status){
+function releaseAdd($email, $product, $value, $desconto, $date, $status){
     include_once 'connection.php';
     include_once 'commands.php';
 
     $user_db_name = getDbName($email);
 
-    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `date`, `status`) VALUES ('$product', $value, '$date', '$status');";
+
+    $sql_code = "INSERT INTO `$user_db_name` (`product`, `value`, `desconto`, `date`, `status`) VALUES ('$product', $value, '$desconto', '$date', '$status');";
     //$sql_query = $mysqli->query($sql_code); //or die (json_encode($mysqli->error));
     
     if($mysqli->query($sql_code) && mysqli_affected_rows($mysqli) > 0){

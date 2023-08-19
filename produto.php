@@ -17,7 +17,7 @@
             <label for="toggle">&#9776;</label>
             <input type="checkbox" id="toggle">
             <div class="menu">
-                <a href="index.php">Home</a>
+                <!-- <a href="index.php">Home</a> -->
                 <a href="servico.php">Servi&ccedil;os</a>
                 <a href="about.php">Sobre</a>
                 <a href="contact.php">Contato</a>
@@ -46,8 +46,7 @@
                     <span class="icon"><ion-icon name="bag-add"></ion-icon></span>
                     <input type="text" id="produtoFilter" required>
                     <label>Produto</label>
-                </div>              
-              
+                </div>
                 
                 <div class="input-box" style="width: 120px;">
                     <span class="icon"><ion-icon name="calendar"></ion-icon></span>
@@ -67,8 +66,8 @@
                 <select id="category">
                     <optgroup label="Produtos">
                         <option value="all">Todos</option>
-                        <option value="entrada">Entrada</option>
-                        <option value="saida">Saida</option>
+                        <option value="release">Entrada</option>
+                        <option value="out">Saida</option>
                     </optgroup>
 
                     <!-- <optgroup label="AutoComplete">
@@ -79,7 +78,7 @@
                 </select>
                 
 
-                <button class="btn_content">Filtrar</button>
+                <button class="btn_content" onclick="updateTable()">Filtrar</button>
             </div>
 
 
