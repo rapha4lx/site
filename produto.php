@@ -1,3 +1,15 @@
+<?php
+    session_start();
+
+    if(empty($_SESSION['email']) && empty($_SESSION['pass'])   )
+    {
+        $_SESSION['logged'] = true;
+        header('Location: login.php');
+        exit();
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

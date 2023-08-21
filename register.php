@@ -1,3 +1,14 @@
+<?php
+    session_start();
+
+    if(isset($_SESSION['email']) && isset($_SESSION['pass'])   )
+    {
+        $_SESSION['logged'] = true;
+        header('Location: produto.php');
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

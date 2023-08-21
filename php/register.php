@@ -6,11 +6,10 @@ session_start();
 
 header('Content-Type: application/json');
 
-$name = $mysqli->real_escape_string($_POST['name']);
 $email = $mysqli->real_escape_string($_POST['email']);
 $pass = $mysqli->real_escape_string($_POST['pass']);
 
-if(empty($name) || empty($email) || empty($pass)){
+if(empty($email) || empty($pass)){
     die(json_encode(""));
 }
 
@@ -46,8 +45,6 @@ $_SESSION['email'] = $email;
 $_SESSION['pass'] = $pass;
 $_SESSION['logged'] = true;
 
-header('Location: product.php');
+header("Location: ../produto.php");
 exit();
-
-//echo json_encode("sucess");
 ?>

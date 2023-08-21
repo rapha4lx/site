@@ -17,6 +17,11 @@ loginForm.addEventListener('submit', (e) => {
         return;
     }
     
+console.log(email.value);
+console.log(senha.value);
+
+
+
     $.ajax({
         url: "php/login.php", // Set the server-side script URL here
         method: "POST", // Set the HTTP method here
@@ -27,8 +32,8 @@ loginForm.addEventListener('submit', (e) => {
         datatype: 'json'
     }).done(function(data) {
         // Handle the response from the server if required
-        //console.log(data);
+        console.log("dsad");
         window.location.href = "produto.php";
-    });    
+    });      
 });
 
