@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MoneyFlow Control</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/index.css">
-    <script src="js/index.js"></script>
+    <link rel="stylesheet" href="css/servico.css">
+    <!-- <script src="js/index.js"></script> -->
 </head>
 
 <body>
@@ -25,16 +25,39 @@
         </div>
     </header>
 
-        <div class="mid_text">
-            <h1 class="titulo">SERVIRÇOS</h2>
-            
+    <div class="mid_text">
+        <h1 class="titulo">SERVIRÇOS</h2>
+    </div>
+
+    <div class="services">
+        <div class="service">
+            <h1>Mensal</h1>
+            <p>Filtro por produtos e data</p>
+            <p>Graficos</p>
+            <p>Suporte 24/7</p>
+            <h2>R$00.00</h2>
+            <button>Comprar</button>
         </div>
-        
+        <div class="service">
+            <h1>Mensal</h1>
+            <p>Filtro por produtos e data</p>
+            <p>Graficos</p>
+            <p>Suporte 24/7</p>
+            <h2>R$00.00</h2>
+            <button>Comprar</button>
+        </div>
+        <div class="service">
+            <h1>Mensal</h1>
+            <p>Filtro por produtos e data</p>
+            <p>Graficos</p>
+            <p>Suporte 24/7</p>
+            <h2>R$00.00</h2>
+            <button>Comprar</button>
+        </div>
+    </div>
 
-</div>  
-
-    
-        
+                
+</div>
 
     
 </body>
